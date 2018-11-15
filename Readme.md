@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Arina Baranova](https://up.htmlacademy.ru/javascript/16/user/926957).
-* Наставник: `Неизвестно`.
+* Наставник: [Boris Mudruk](https://htmlacademy.ru/profile/id855791).
 
 ---
 
