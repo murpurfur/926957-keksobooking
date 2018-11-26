@@ -12,6 +12,7 @@ var titlesList = [
   'Уютное бунгало далеко от моря',
   'Неуютное бунгало по колено в воде'
 ]
+
 /*
 функция которая возвращает рандомную строку из массива 
 
@@ -21,6 +22,7 @@ var titlesList = [
 повторить 
   пока количество элементов больше 0
 */
+
 var typesList = ['palace', 'flat', 'house', 'bungalo']
 
 var checkInOutTime = ['12:00', '13:00', '14:00']
@@ -52,19 +54,13 @@ var offer = {
   address: 'строка, адрес предложения, представляет собой запись вида "{{location.x}}, {{location.y}}"',
   //например, "600, 350"
   price: randomValue(1000, 1000000),
-  type: 'строка с одним из четырёх фиксированных значений: palace, flat, house или bungalo',
+  type: typesList[randomValue(0, typesList.length - 1)],
   rooms: randomValue(1, 5),
-  //число, случайное количество комнат от 1 до 5
   guests: randomValue(1, 8),
-  //число, случайное количество гостей, которое можно разместить
   checkin: checkInOutTime[randomValue(0, 3)],
-  //строка с одним из трёх фиксированных значений: 12:00, 13:00 или 14:00,
   checkout: checkInOutTime[randomValue(0, 3)],
-  //строка с одним из трёх фиксированных значений: 12:00, 13:00 или 14:00
-  features: [],
-  //массив строк случайной длины из ниже предложенных: "wifi", "dishwasher", "parking", "washer", "elevator", "conditioner",
+  features: featuresList.splice(0, randomValue(0, featuresList.lenght)),
   description: '',
-  //пустая строка,
   photos: []
   //массив из строк "http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg"
   //и "http://o0.github.io/assets/images/tokyo/hotel3.jpg" расположенных в произвольном порядке
@@ -73,6 +69,6 @@ var offer = {
 var location = {
   x: '',
   //случайное число, координата x метки на карте. Значение ограничено размерами блока, в котором перетаскивается метка.
-  y: Math.floor(Math.random() * 630 + 130)
+  y: randomValue(130, 630)
   //случайное число, координата y метки на карте от 130 до 630.
 }
