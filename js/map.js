@@ -1,14 +1,17 @@
+var map = document.querySelector('.map')
+
+map.classList.remove('map--faded')
+
 var randomValue = function(start, end) {
   return Math.floor(Math.random() * end + start)
 }
-
-var test = randomValue(1, 4)
 
 var typesList = ['palace', 'flat', 'house', 'bungalo']
 
 var checkInOutTime = ['12:00', '13:00', '14:00']
 
 var featuresList = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner']
+
 var featuresListRandom = randomValue(1, featuresList.length)
 
 var photosList = [
@@ -31,12 +34,6 @@ var shuffleArray = function(array) {
   return array
 }
 
-var author = {
-  avatar: 'img/avatars/user' + '0' + randomValue(1, 8) + '.png'
-}
-
-var map = document.querySelector('.map')
-
 var titlesList = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -48,25 +45,43 @@ var titlesList = [
   'Неуютное бунгало по колено в воде'
 ]
 
+var avatarNumbers = []
+
+for (var i = 1; i <= 8; i++) {
+  avatarNumbers.push(i)
+}
+
 var objectArray = []
 
 for (var i = 0; i < 8; i++) {
+  var randomIndex = randomValue(0, avatarNumbers.length)
   var randomStringNumber = randomValue(0, titlesList.length)
-
+  var locationX = randomValue(1, map.scrollWidth)
+  var locationY = randomValue(130, 630)
   objectArray.push({
-    title: titlesList[randomStringNumber],
-    address: randomValue(1, map.scrollWidth) + ', ' + randomValue(130, 630),
-    price: randomValue(1000, 1000000),
-    type: typesList[randomValue(0, typesList.length - 1)],
-    rooms: randomValue(1, 5),
-    guests: randomValue(1, 8),
-    checkin: checkInOutTime[randomValue(0, 3)],
-    checkout: checkInOutTime[randomValue(0, 3)],
-    features: featuresList.splice(0, featuresListRandom),
-    description: '',
-    photos: shuffleArray(photosList)
+    author: {
+      avatar: 'img/avatars/user' + '0' + avatarNumbers[randomIndex] + '.png'
+    },
+    offer: {
+      title: titlesList[randomStringNumber],
+      address: locationX + ', ' + locationY,
+      price: randomValue(1000, 1000000),
+      type: typesList[randomValue(0, typesList.length - 1)],
+      rooms: randomValue(1, 5),
+      guests: randomValue(1, 8),
+      checkin: checkInOutTime[randomValue(0, 3)],
+      checkout: checkInOutTime[randomValue(0, 3)],
+      features: featuresList.splice(0, featuresListRandom),
+      description: '',
+      photos: shuffleArray(photosList)
+    },
+    location: {
+      x: locationX,
+      y: locationY
+    }
   })
   titlesList.splice(randomStringNumber, 1)
+  avatarNumbers.splice(randomIndex, 1)
 }
 
 console.log(objectArray)
