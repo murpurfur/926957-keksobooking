@@ -1,4 +1,5 @@
 /* eslint-disable strict */
+'use strict';
 
 var map = document.querySelector('.map');
 var mapArea = document.querySelector('.map__pins');
@@ -130,8 +131,28 @@ card.querySelector('.popup__text--capacity').textContent =
 card.querySelector('.popup__text--time').textContent =
   'Заезд после ' + objectArray[0].offer.checkin + ', выезд до ' + objectArray[0].offer.checkout;
 
-card.querySelector('.popup__features').ul = objectArray[0].offer.features;
-/* Нужен совет как выводить список */
+card.querySelectorAll('.popup__feature').remove();
+
+var featureAllLi = card.querySelector('.popup__features');
+
+for (var k = featureAllLi.length; k >= 0; k--) {
+  card.querySelector('.popup__features').children[k].remove();
+}
+
+console.log(card.querySelector('.popup__features').children);
+/* cicle dlya proverki imen */
+// for (var featureIndex = 0; featureIndex < objectArray[0].offer.features.length; featureIndex++) {
+//   // if (objectArray[0].offer.feature[featureIndex] ===
+//   console.log(card.querySelector('.popup__features').children[featureIndex]);
+//   console.log(card.querySelector('.popup__features').children[featureIndex].classList[1]);
+//   console.log(objectArray[0].offer.features[featureIndex]);
+//   if (
+//     card.querySelector('.popup__features').children[featureIndex].classList[1] ==
+//     'popup__feature--' + objectArray[0].offer.features[featureIndex]
+//   ) {
+//     card.querySelector('.popup__features').children[featureIndex].remove();
+//   }
+// }
 
 card.querySelector('.popup__description').textContent = objectArray[0].offer.description;
 console.log(objectArray[0].offer.photos[0]);
