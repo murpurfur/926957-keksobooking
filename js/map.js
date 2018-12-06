@@ -23,22 +23,6 @@ var photosList = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-/* ----- Шафл не пригодился */
-
-// var shuffleArray = function (array) {
-//   var currentIndex = array.length;
-//   var temporaryValue;
-//   var randomIndex;
-//   while (currentIndex !== 0) {
-//     randomIndex = Math.floor(Math.random() * currentIndex);
-//     currentIndex--;
-//     temporaryValue = array[currentIndex];
-//     array[currentIndex] = array[randomIndex];
-//     array[randomIndex] = temporaryValue;
-//   }
-//   return array;
-// };
-
 var titlesList = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
