@@ -23,19 +23,21 @@ var photosList = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-var shuffleArray = function (array) {
-  var currentIndex = array.length;
-  var temporaryValue;
-  var randomIndex;
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-  return array;
-};
+/* ----- Шафл не пригодился */
+
+// var shuffleArray = function (array) {
+//   var currentIndex = array.length;
+//   var temporaryValue;
+//   var randomIndex;
+//   while (currentIndex !== 0) {
+//     randomIndex = Math.floor(Math.random() * currentIndex);
+//     currentIndex--;
+//     temporaryValue = array[currentIndex];
+//     array[currentIndex] = array[randomIndex];
+//     array[randomIndex] = temporaryValue;
+//   }
+//   return array;
+// };
 
 var titlesList = [
   'Большая уютная квартира',
@@ -79,7 +81,7 @@ for (var i = 0; i < 8; i++) {
       checkout: checkInOutTime[getRandomValue(0, 2)],
       features: featuresList.slice(0, featuresListRandom),
       description: '',
-      photos: shuffleArray(photosList)
+      photos: photosList
     },
     location: {
       x: locationX,
@@ -97,8 +99,6 @@ for (var pinCount = 0; pinCount < objectArray.length; pinCount++) {
   var element = templatePin.cloneNode(true);
   element.style.left = objectArray[pinCount].location.x + 50 * 0.5 + 'px';
   element.style.top = objectArray[pinCount].location.y + 70 + 'px';
-  // console.log(document.querySelector('button[type="button"]'));
-  // console.log(document.querySelector('button[type="button"]'.clientHeight));
   element.children[0].src = objectArray[pinCount].author.avatar;
   element.children[0].alt = objectArray[pinCount].offer.title;
   fragment.appendChild(element);
@@ -131,37 +131,35 @@ card.querySelector('.popup__text--capacity').textContent =
 card.querySelector('.popup__text--time').textContent =
   'Заезд после ' + objectArray[0].offer.checkin + ', выезд до ' + objectArray[0].offer.checkout;
 
-card.querySelectorAll('.popup__feature').remove();
+/* ----- Удаляю список */
+card.querySelector('.popup__features').remove();
 
-var featureAllLi = card.querySelector('.popup__features');
+/* ----- Создаю новый список */
+var newUl = document.createElement('ul');
+newUl.className = 'popup__features';
 
-for (var k = featureAllLi.length; k >= 0; k--) {
-  card.querySelector('.popup__features').children[k].remove();
+/* ----- Создаю строки в списке на основе массива фичей из первого объекта*/
+for (var k = 0; k < objectArray[0].offer.features.length; k++) {
+  var newLi = document.createElement('li');
+  newLi.className = 'popup__feature popup__feature--' + objectArray[0].offer.features[k];
+  newUl.appendChild(newLi);
 }
 
-console.log(card.querySelector('.popup__features').children);
-/* cicle dlya proverki imen */
-// for (var featureIndex = 0; featureIndex < objectArray[0].offer.features.length; featureIndex++) {
-//   // if (objectArray[0].offer.feature[featureIndex] ===
-//   console.log(card.querySelector('.popup__features').children[featureIndex]);
-//   console.log(card.querySelector('.popup__features').children[featureIndex].classList[1]);
-//   console.log(objectArray[0].offer.features[featureIndex]);
-//   if (
-//     card.querySelector('.popup__features').children[featureIndex].classList[1] ==
-//     'popup__feature--' + objectArray[0].offer.features[featureIndex]
-//   ) {
-//     card.querySelector('.popup__features').children[featureIndex].remove();
-//   }
-// }
+/* ----- Вставляется в конец, почемууууууууу */
+card.insertBefore(newUl, card.querySelector('.popup__description'));
 
+/* ----- Описание объекта */
 card.querySelector('.popup__description').textContent = objectArray[0].offer.description;
-console.log(objectArray[0].offer.photos[0]);
-card.querySelector('.popup__photos').src = objectArray[0].offer.photos[0];
-console.log(card.querySelector('.popup__photos').src);
 
-/* И вывод фотографий странным образом не работает */
+/* ----- Вывод фотографий */
+card.querySelector('.popup__photo').src = objectArray[0].offer.photos[0];
+var photosCard = card.querySelector('.popup__photo');
 
-card.querySelector('img').src = objectArray[0].author.avatar;
+for (var p = 1; p < objectArray[0].offer.photos.length; p++) {
+  var dupPhotosCard = photosCard.cloneNode(true);
+  dupPhotosCard.src = objectArray[0].offer.photos[p];
+  card.querySelector('.popup__photos').appendChild(dupPhotosCard);
+}
 
 /* ----- Вывожу карточку на страницу */
 map.insertBefore(card, map.querySelector('.map__filters-container'));
