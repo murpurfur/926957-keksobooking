@@ -1,4 +1,4 @@
-/* eslint-disable strict */
+// eslint-disable strict
 'use strict'
 
 var map = document.querySelector('.map')
@@ -7,12 +7,26 @@ var mapArea = document.querySelector('.map__pins')
 var pinWidth = 65
 var pinHeigh = 87
 
-/* ----- Функция чтобы задизейблить поля */
 var notice = document.querySelector('.notice')
 var inputFields = notice.querySelectorAll('fieldset')
 var mapFilterFields = document.querySelectorAll('.map__filter')
 var adForm = document.querySelector('.ad-form')
+var addressForm = notice.querySelector('#address')
+var mainPin = document.querySelector('.map__pin--main')
 
+var pinCoordinates = {
+  x: Math.round(mainPin.offsetLeft + pinWidth / 2),
+  y: Math.round(mainPin.offsetTop + pinHeigh / 2)
+}
+
+// ----- Функция ввода адреса
+var fillAddressField = function() {
+  addressForm.value = pinCoordinates.x + ', ' + pinCoordinates.y
+}
+
+fillAddressField()
+
+// ----- Функция чтобы задизейблить поля
 var setFieldsDisabled = function(fields) {
   for (var i = 0; i < fields.length; i++) {
     fields[i].disabled = true
@@ -20,7 +34,7 @@ var setFieldsDisabled = function(fields) {
   }
 }
 
-/* ----- Функция чтобы раздизейблить поля */
+// ----- Функция чтобы раздизейблить поля
 var removeFieldsDisabled = function(fields) {
   for (var i = 0; i < fields.length; i++) {
     fields[i].disabled = false
@@ -28,7 +42,7 @@ var removeFieldsDisabled = function(fields) {
   }
 }
 
-/* ----- Функция перевода в неактивное состояние */
+// ----- Функция перевода в неактивное состояние
 var disablePageState = function() {
   setFieldsDisabled(inputFields)
   setFieldsDisabled(mapFilterFields)
@@ -36,7 +50,7 @@ var disablePageState = function() {
 
 disablePageState()
 
-/* ----- Функция перевода в активное состояние */
+// ----- Функция перевода в активное состояние
 var enablePageState = function() {
   map.classList.remove('map--faded')
   removeFieldsDisabled(mapFilterFields)
@@ -44,7 +58,7 @@ var enablePageState = function() {
   removeFieldsDisabled(inputFields)
 }
 
-/* ----- Функция для генерации массива объектов */
+// ----- Функция для генерации массива объектов
 var generateObjectList = function() {
   var getRandomValue = function(start, end) {
     return Math.floor(Math.random() * end + start)
@@ -79,7 +93,7 @@ var generateObjectList = function() {
     avatarNumbers.push(avatarCount)
   }
 
-  /* ----- Генерирую массив случайных объявлений */
+  // ----- Генерирую массив случайных объявлений
   var objects = []
 
   for (var i = 0; i < 8; i++) {
@@ -116,10 +130,10 @@ var generateObjectList = function() {
   return objects
 }
 
-/* ----- Запускаю функцию генерации объектов */
+// ----- Запускаю функцию генерации объектов
 var objectList = generateObjectList()
 
-/* ----- Функция вывода пинов на карту */
+// ----- Функция вывода пинов на карту
 var drawPins = function(objects) {
   var templatePin = document.querySelector('#pin').content.querySelector('button')
   var fragment = document.createDocumentFragment()
@@ -132,12 +146,11 @@ var drawPins = function(objects) {
     element.children[0].alt = objects[i].offer.title
     fragment.appendChild(element)
 
-    /* Добавляю слушателя по клику */
+    // Добавляю слушателя по клику
 
     var clickHandler = function(i) {
       element.addEventListener('click', function() {
         generateCard(objectList[i])
-        console.log(map.querySelector('.map__card popup'))
       })
     }
     clickHandler(i)
@@ -145,10 +158,9 @@ var drawPins = function(objects) {
   return mapArea.appendChild(fragment)
 }
 
-/* ----- Функция для наполнения карточки объекта */
+// ----- Функция для наполнения карточки объекта
 var generateCard = function(object) {
-  var addedCard = map.querySelector('.map__card popup')
-  console.log(document.querySelector('.map__card popup'))
+  var addedCard = map.querySelector('.map__card, .popup')
   if (addedCard) {
     addedCard.remove()
   }
@@ -157,7 +169,7 @@ var generateCard = function(object) {
   card.querySelector('.popup__title').textContent = object.offer.title
   card.querySelector('.popup__text--address').textContent = object.offer.address
   card.querySelector('.popup__text--price').textContent = object.offer.price + '₽/ночь'
-  /* ----- Мапа для типов */
+  // ----- Мапа для типов
   var objectTypes = {
     bungalo: 'Бунгало',
     flat: 'Квартира',
@@ -169,12 +181,12 @@ var generateCard = function(object) {
     object.offer.rooms + ' комнаты для ' + object.offer.guests + ' гостей'
   card.querySelector('.popup__text--time').textContent =
     'Заезд после ' + object.offer.checkin + ', выезд до ' + object.offer.checkout
-  /* ----- Удаляю список */
+  // ----- Удаляю список
   card.querySelector('.popup__features').remove()
-  /* ----- Создаю новый список */
+  // ----- Создаю новый список
   var newUl = document.createElement('ul')
   newUl.classList.add('popup__features')
-  /* ----- Создаю строки в списке на основе массива фичей из первого объекта*/
+  // ----- Создаю строки в списке на основе массива фичей из первого объекта
   for (var k = 0; k < object.offer.features.length; k++) {
     var newLi = document.createElement('li')
     newLi.classList.add('popup__feature')
@@ -182,9 +194,9 @@ var generateCard = function(object) {
     newUl.appendChild(newLi)
   }
   card.insertBefore(newUl, card.querySelector('.popup__description'))
-  /* ----- Описание объекта */
+  // ----- Описание объекта
   card.querySelector('.popup__description').textContent = object.offer.description
-  /* ----- Вывод фотографий */
+  // ----- Вывод фотографий
   card.querySelector('.popup__photo').src = object.offer.photos[0]
   var photosCard = card.querySelector('.popup__photo')
   for (var p = 1; p < object.offer.photos.length; p++) {
@@ -192,7 +204,7 @@ var generateCard = function(object) {
     dupPhotosCard.src = object.offer.photos[p]
     card.querySelector('.popup__photos').appendChild(dupPhotosCard)
   }
-  /* ----- Возвращаю вывод на страницу */
+  // ----- Возвращаю вывод на страницу
   var closeButton = card.querySelector('.popup__close')
   closeButton.addEventListener('click', function() {
     closePopup()
@@ -200,21 +212,18 @@ var generateCard = function(object) {
   return map.insertBefore(card, map.querySelector('.map__filters-container'))
 }
 
+// ----- Функция закрытия попапа
 function closePopup() {
   var addedCard = map.querySelector('.map__card')
   addedCard.remove()
 }
 
-/* ----- Вызываю функцию отрисовки карточки первым элементом из массива */
-// generateCard(objectList[0])
-
-/* ----- Перемещение главной метки */
-var mainPin = document.querySelector('.map__pin--main')
-var pinCoordinates = mainPin.getBoundingClientRect()
-// console.log(pinCoordinates)
+// ----- Перемещение главной метки
 
 mainPin.addEventListener('mouseup', function(evt) {
   enablePageState()
-  /* ----- Отрисовываю пины */
+  fillAddressField()
+  console.log(pinCoordinates.x, pinCoordinates.y)
+  // ----- Отрисовываю пины
   drawPins(objectList)
 })
