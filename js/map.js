@@ -131,22 +131,29 @@ var drawPins = function(objects) {
     element.children[0].src = objects[i].author.avatar
     element.children[0].alt = objects[i].offer.title
     fragment.appendChild(element)
-    /* Попытка замыкания. Добавляю слушателя по клику */
-    var hateClosures = function() {
+
+    /* Добавляю слушателя по клику */
+
+    var clickHandler = function(i) {
       element.addEventListener('click', function() {
-        console.log('карточка ' + i)
-        console.log(objectList[i])
         generateCard(objectList[i])
+        console.log(map.querySelector('.map__card popup'))
       })
-      hateClosures()
     }
+    clickHandler(i)
   }
   return mapArea.appendChild(fragment)
 }
 
 /* ----- Функция для наполнения карточки объекта */
 var generateCard = function(object) {
-  var card = document.querySelector('#card').content.querySelector('article')
+  var addedCard = map.querySelector('.map__card popup')
+  console.log(document.querySelector('.map__card popup'))
+  if (addedCard) {
+    addedCard.remove()
+  }
+  var templateCard = document.querySelector('#card').content.querySelector('article')
+  var card = templateCard.cloneNode(true)
   card.querySelector('.popup__title').textContent = object.offer.title
   card.querySelector('.popup__text--address').textContent = object.offer.address
   card.querySelector('.popup__text--price').textContent = object.offer.price + '₽/ночь'
@@ -186,7 +193,16 @@ var generateCard = function(object) {
     card.querySelector('.popup__photos').appendChild(dupPhotosCard)
   }
   /* ----- Возвращаю вывод на страницу */
+  var closeButton = card.querySelector('.popup__close')
+  closeButton.addEventListener('click', function() {
+    closePopup()
+  })
   return map.insertBefore(card, map.querySelector('.map__filters-container'))
+}
+
+function closePopup() {
+  var addedCard = map.querySelector('.map__card')
+  addedCard.remove()
 }
 
 /* ----- Вызываю функцию отрисовки карточки первым элементом из массива */
@@ -195,7 +211,7 @@ var generateCard = function(object) {
 /* ----- Перемещение главной метки */
 var mainPin = document.querySelector('.map__pin--main')
 var pinCoordinates = mainPin.getBoundingClientRect()
-console.log(pinCoordinates)
+// console.log(pinCoordinates)
 
 mainPin.addEventListener('mouseup', function(evt) {
   enablePageState()
