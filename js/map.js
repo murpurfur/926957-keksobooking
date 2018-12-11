@@ -4,11 +4,14 @@
 var map = document.querySelector('.map')
 var mapArea = document.querySelector('.map__pins')
 
-// map.classList.remove('map--faded');
+var pinWidth = 65
+var pinHeigh = 87
 
 /* ----- Функция чтобы задизейблить поля */
 var notice = document.querySelector('.notice')
 var inputFields = notice.querySelectorAll('fieldset')
+var mapFilterFields = document.querySelectorAll('.map__filter')
+
 var setFieldsDisabled = function(fields) {
   for (var i = 0; i < fields.length; i++) {
     fields[i].disabled = true
@@ -16,8 +19,41 @@ var setFieldsDisabled = function(fields) {
   }
 }
 
-setFieldsDisabled(inputFields)
+/* ----- Функция чтобы раздизейблить поля */
+var removeFieldsDisabled = function(fields) {
+  for (var i = 0; i < fields.length; i++) {
+    fields[i].disabled = false
+    fields[i].classList.remove('disabled')
+  }
+}
 
+/* ----- Функция перевода в неактивное состояние */
+var disablePageState = function() {
+  setFieldsDisabled(inputFields)
+  setFieldsDisabled(mapFilterFields)
+}
+
+disablePageState()
+
+/* ----- Функция перевода в активное состояние */
+var enablePageState = function() {
+  map.classList.remove('map--faded')
+  removeFieldsDisabled(mapFilterFields)
+  removeFieldsDisabled(inputFields)
+}
+
+/* ----- Перемещение главной метки */
+var mainPin = document.querySelector('.map__pin--main')
+mainPin.addEventListener('mouseup', function(evt) {
+  enablePageState()
+  console.log(evt)
+})
+
+/* ----- */
+/* ----- */
+/* ----- */
+/* ----- */
+/* ----- */
 /* ----- Функция для генерации массива объектов */
 var generateObjectList = function() {
   var getRandomValue = function(start, end) {
