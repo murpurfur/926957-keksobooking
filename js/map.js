@@ -3,8 +3,8 @@
 var map = document.querySelector('.map');
 var mapArea = document.querySelector('.map__pins');
 
-var pinWidth = 65;
-var pinHeigh = 87;
+var PINWIDTH = 65;
+var PINHEIGHT = 87;
 
 var notice = document.querySelector('.notice');
 var inputFields = notice.querySelectorAll('fieldset');
@@ -14,8 +14,8 @@ var addressForm = notice.querySelector('#address');
 var mainPin = document.querySelector('.map__pin--main');
 
 var pinCoordinates = {
-  x: Math.round(mainPin.offsetLeft + pinWidth / 2),
-  y: Math.round(mainPin.offsetTop + pinHeigh / 2)
+  x: Math.round(mainPin.offsetLeft + PINWIDTH / 2),
+  y: Math.round(mainPin.offsetTop + PINHEIGHT / 2)
 };
 
 // ----- Функция ввода адреса
@@ -57,12 +57,12 @@ var enablePageState = function () {
   removeFieldsDisabled(inputFields);
 };
 
+// ----- Функция генерации случайного числа от и до
+var getRandomValue = function (start, end) {
+  return Math.floor(Math.random() * end + start);
+};
 // ----- Функция для генерации массива объектов
 var generateObjectList = function () {
-  var getRandomValue = function (start, end) {
-    return Math.floor(Math.random() * end + start);
-  };
-
   var typesList = ['palace', 'flat', 'house', 'bungalo'];
 
   var checkInOutTime = ['12:00', '13:00', '14:00'];
@@ -139,20 +139,21 @@ var drawPins = function (objects) {
 
   for (var i = 0; i < objects.length; i++) {
     var element = templatePin.cloneNode(true);
-    element.style.left = objects[i].location.x + 50 * 0.5 + 'px';
+    element.style.left = objects[i].location.x + 25 + 'px';
     element.style.top = objects[i].location.y + 70 + 'px';
     element.children[0].src = objects[i].author.avatar;
     element.children[0].alt = objects[i].offer.title;
     fragment.appendChild(element);
 
-    // Добавляю слушателя по клику
-
-    var clickHandler = function (j) {
-      element.addEventListener('click', function () {
-        generateCard(objectList[j]);
-      });
-    };
-    clickHandler(i);
+    // Добавляю слушателя по клику чтобы записать айди пина
+    element.addEventListener(
+        'click',
+        (function toClosure(j) {
+          return function handler() {
+            return generateCard(objectList[j]);
+          };
+        })(i)
+    );
   }
   return mapArea.appendChild(fragment);
 };
