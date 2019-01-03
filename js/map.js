@@ -27,26 +27,17 @@ var fillAddressField = function () {
 
 fillAddressField();
 
-// ----- Функция чтобы задизейблить поля
-var setFieldsDisabled = function (fields) {
+// ----- Функция чтобы задизейблить или раздизейблить поля
+var toggleFieldsDisabled = function (fields, status) {
   for (var i = 0; i < fields.length; i++) {
-    fields[i].disabled = true;
-    fields[i].setAttribute('style', 'pointer-events:none');
-  }
-};
-
-// ----- Функция чтобы раздизейблить поля
-var removeFieldsDisabled = function (fields) {
-  for (var i = 0; i < fields.length; i++) {
-    fields[i].disabled = false;
-    fields[i].removeAttribute('style', 'pointer-events:none');
+    fields[i].disabled = status;
   }
 };
 
 // ----- Функция перевода в неактивное состояние
 var disablePageState = function () {
-  setFieldsDisabled(inputFields);
-  setFieldsDisabled(mapFilterFields);
+  toggleFieldsDisabled(inputFields, true);
+  toggleFieldsDisabled(mapFilterFields, true);
 };
 
 disablePageState();
@@ -54,9 +45,9 @@ disablePageState();
 // ----- Функция перевода в активное состояние
 var enablePageState = function () {
   map.classList.remove('map--faded');
-  removeFieldsDisabled(mapFilterFields);
+  toggleFieldsDisabled(mapFilterFields, false);
   adForm.classList.remove('ad-form--disabled');
-  removeFieldsDisabled(inputFields);
+  toggleFieldsDisabled(inputFields, false);
 };
 
 // ----- Функция генерации случайного числа от и до
@@ -206,6 +197,7 @@ var generateCard = function (object) {
     dupPhotosCard.src = object.offer.photos[p];
     card.querySelector('.popup__photos').appendChild(dupPhotosCard);
   }
+
   // ----- Возвращаю вывод на страницу
   var closeButton = card.querySelector('.popup__close');
   closeButton.addEventListener('click', function () {
