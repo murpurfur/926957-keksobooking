@@ -128,7 +128,7 @@ var objectList = generateObjectList();
 // ----- Функция слушателя записывающая айди пина
 var toClosure = function (j) {
   return function handler() {
-    return generateCard(objectList[j]);
+    generateCard(objectList[j]);
   };
 };
 
@@ -201,7 +201,7 @@ var generateCard = function (object) {
   // ----- Возвращаю вывод на страницу
   var closeButton = card.querySelector('.popup__close');
   closeButton.addEventListener('click', closePopup);
-  return map.insertBefore(card, map.querySelector('.map__filters-container'));
+  map.insertBefore(card, map.querySelector('.map__filters-container'));
 };
 
 // ----- Функция закрытия попапа
