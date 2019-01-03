@@ -1,17 +1,61 @@
-/* eslint-disable strict */
 'use strict';
 
 var map = document.querySelector('.map');
 var mapArea = document.querySelector('.map__pins');
 
-map.classList.remove('map--faded');
+var PIN_WIDTH = 65;
+var PIN_HEIGHT = 87;
+var SHIFT_PIN_X = 25;
+var SHIFT_PIN_Y = 70;
 
-/* ----- Функция для генерации массива объектов */
+var notice = document.querySelector('.notice');
+var inputFields = notice.querySelectorAll('fieldset');
+var mapFilterFields = document.querySelectorAll('.map__filter');
+var adForm = document.querySelector('.ad-form');
+var addressForm = notice.querySelector('#address');
+var mainPin = document.querySelector('.map__pin--main');
+
+var pinCoordinates = {
+  x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
+  y: Math.round(mainPin.offsetTop + PIN_HEIGHT / 2)
+};
+
+// ----- Функция ввода адреса
+var fillAddressField = function () {
+  addressForm.value = pinCoordinates.x + ', ' + pinCoordinates.y;
+};
+
+fillAddressField();
+
+// ----- Функция чтобы задизейблить или раздизейблить поля
+var toggleFieldsDisabled = function (fields, status) {
+  for (var i = 0; i < fields.length; i++) {
+    fields[i].disabled = status;
+  }
+};
+
+// ----- Функция перевода в неактивное состояние
+var disablePageState = function () {
+  toggleFieldsDisabled(inputFields, true);
+  toggleFieldsDisabled(mapFilterFields, true);
+};
+
+disablePageState();
+
+// ----- Функция перевода в активное состояние
+var enablePageState = function () {
+  map.classList.remove('map--faded');
+  toggleFieldsDisabled(mapFilterFields, false);
+  adForm.classList.remove('ad-form--disabled');
+  toggleFieldsDisabled(inputFields, false);
+};
+
+// ----- Функция генерации случайного числа от и до
+var getRandomValue = function (start, end) {
+  return Math.floor(Math.random() * end + start);
+};
+// ----- Функция для генерации массива объектов
 var generateObjectList = function () {
-  var getRandomValue = function (start, end) {
-    return Math.floor(Math.random() * end + start);
-  };
-
   var typesList = ['palace', 'flat', 'house', 'bungalo'];
 
   var checkInOutTime = ['12:00', '13:00', '14:00'];
@@ -41,7 +85,7 @@ var generateObjectList = function () {
     avatarNumbers.push(avatarCount);
   }
 
-  /* ----- Генерирую массив случайных объявлений */
+  // ----- Генерирую массив случайных объявлений
   var objects = [];
 
   for (var i = 0; i < 8; i++) {
@@ -78,37 +122,47 @@ var generateObjectList = function () {
   return objects;
 };
 
-/* ----- Запускаю функцию генерации объектов */
+// ----- Запускаю функцию генерации объектов
 var objectList = generateObjectList();
 
-/* ----- Функция вывода пинов на карту */
+// ----- Функция слушателя записывающая айди пина
+var toClosure = function (j) {
+  return function handler() {
+    generateCard(objectList[j]);
+  };
+};
+
+// ----- Функция вывода пинов на карту
 var drawPins = function (objects) {
   var templatePin = document.querySelector('#pin').content.querySelector('button');
   var fragment = document.createDocumentFragment();
 
-  for (var pinCount = 0; pinCount < objects.length; pinCount++) {
+  for (var i = 0; i < objects.length; i++) {
     var element = templatePin.cloneNode(true);
-    element.style.left = objects[pinCount].location.x + 50 * 0.5 + 'px';
-    element.style.top = objects[pinCount].location.y + 70 + 'px';
-    element.children[0].src = objects[pinCount].author.avatar;
-    element.children[0].alt = objects[pinCount].offer.title;
+    element.style.left = objects[i].location.x + SHIFT_PIN_X + 'px';
+    element.style.top = objects[i].location.y + SHIFT_PIN_Y + 'px';
+    element.children[0].src = objects[i].author.avatar;
+    element.children[0].alt = objects[i].offer.title;
     fragment.appendChild(element);
+
+    // Добавляю слушателя по клику чтобы записать айди пина
+    element.addEventListener('click', toClosure(i));
   }
   return mapArea.appendChild(fragment);
 };
 
-/* ----- Передаю массив сгенерированных объектов в функцию отрисовки пинов */
-drawPins(objectList);
-
-/* ----- Функция для наполнения карточки объекта */
+// ----- Функция для наполнения карточки объекта
 var generateCard = function (object) {
-  var card = document.querySelector('#card').content.querySelector('article');
-
+  var addedCard = map.querySelector('.map__card, .popup');
+  if (addedCard) {
+    addedCard.remove();
+  }
+  var templateCard = document.querySelector('#card').content.querySelector('article');
+  var card = templateCard.cloneNode(true);
   card.querySelector('.popup__title').textContent = object.offer.title;
   card.querySelector('.popup__text--address').textContent = object.offer.address;
   card.querySelector('.popup__text--price').textContent = object.offer.price + '₽/ночь';
-
-  /* ----- Мапа для типов */
+  // ----- Мапа для типов
   var objectTypes = {
     bungalo: 'Бунгало',
     flat: 'Квартира',
@@ -116,46 +170,50 @@ var generateCard = function (object) {
     palace: 'Дворец'
   };
   card.querySelector('.popup__type').textContent = objectTypes[object.offer.type];
-
   card.querySelector('.popup__text--capacity').textContent =
     object.offer.rooms + ' комнаты для ' + object.offer.guests + ' гостей';
-
   card.querySelector('.popup__text--time').textContent =
     'Заезд после ' + object.offer.checkin + ', выезд до ' + object.offer.checkout;
-
-  /* ----- Удаляю список */
+  // ----- Удаляю список
   card.querySelector('.popup__features').remove();
-
-  /* ----- Создаю новый список */
+  // ----- Создаю новый список
   var newUl = document.createElement('ul');
   newUl.classList.add('popup__features');
-
-  /* ----- Создаю строки в списке на основе массива фичей из первого объекта*/
+  // ----- Создаю строки в списке на основе массива фичей из первого объекта
   for (var k = 0; k < object.offer.features.length; k++) {
     var newLi = document.createElement('li');
     newLi.classList.add('popup__feature');
     newLi.classList.add('popup__feature--' + object.offer.features[k]);
     newUl.appendChild(newLi);
   }
-
   card.insertBefore(newUl, card.querySelector('.popup__description'));
-
-  /* ----- Описание объекта */
+  // ----- Описание объекта
   card.querySelector('.popup__description').textContent = object.offer.description;
-
-  /* ----- Вывод фотографий */
+  // ----- Вывод фотографий
   card.querySelector('.popup__photo').src = object.offer.photos[0];
   var photosCard = card.querySelector('.popup__photo');
-
   for (var p = 1; p < object.offer.photos.length; p++) {
     var dupPhotosCard = photosCard.cloneNode(true);
     dupPhotosCard.src = object.offer.photos[p];
     card.querySelector('.popup__photos').appendChild(dupPhotosCard);
   }
 
-  /* ----- Возвращаю вывод на страницу */
-  return map.insertBefore(card, map.querySelector('.map__filters-container'));
+  // ----- Возвращаю вывод на страницу
+  var closeButton = card.querySelector('.popup__close');
+  closeButton.addEventListener('click', closePopup);
+  map.insertBefore(card, map.querySelector('.map__filters-container'));
 };
 
-/* ----- Вызываю функцию отрисовки карточки первым элементом из массива */
-generateCard(objectList[0]);
+// ----- Функция закрытия попапа
+function closePopup() {
+  var addedCard = map.querySelector('.map__card');
+  addedCard.remove();
+}
+
+// ----- Перемещение главной метки
+mainPin.addEventListener('click', function () {
+  enablePageState();
+  fillAddressField();
+  // ----- Отрисовываю пины
+  drawPins(objectList);
+});
