@@ -200,11 +200,15 @@ var generateCard = function (object) {
 
   // ----- Возвращаю вывод на страницу
   var closeButton = card.querySelector('.popup__close');
-  closeButton.addEventListener('click', function () {
-    map.querySelector('.map__card').remove();
-  });
+  closeButton.addEventListener('click', closePopup);
   return map.insertBefore(card, map.querySelector('.map__filters-container'));
 };
+
+// ----- Функция закрытия попапа
+function closePopup() {
+  var addedCard = map.querySelector('.map__card');
+  addedCard.remove();
+}
 
 // ----- Перемещение главной метки
 mainPin.addEventListener('click', function () {
