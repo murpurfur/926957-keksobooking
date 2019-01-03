@@ -1238,8 +1238,3 @@ fieldset {
   outline: none;
   opacity: 0.6;
 }
-
-/* Мой класс для дизейбла ховеров */
-.disabled {
-  pointer-events: none;
-}

@@ -31,7 +31,7 @@ fillAddressField();
 var setFieldsDisabled = function (fields) {
   for (var i = 0; i < fields.length; i++) {
     fields[i].disabled = true;
-    fields[i].classList.add('disabled');
+    fields[i].setAttribute('style', 'pointer-events:none');
   }
 };
 
@@ -39,7 +39,7 @@ var setFieldsDisabled = function (fields) {
 var removeFieldsDisabled = function (fields) {
   for (var i = 0; i < fields.length; i++) {
     fields[i].disabled = false;
-    fields[i].classList.remove('disabled');
+    fields[i].removeAttribute('style', 'pointer-events:none');
   }
 };
 
