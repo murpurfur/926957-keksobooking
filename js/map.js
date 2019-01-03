@@ -3,8 +3,10 @@
 var map = document.querySelector('.map');
 var mapArea = document.querySelector('.map__pins');
 
-var PINWIDTH = 65;
-var PINHEIGHT = 87;
+var PIN_WIDTH = 65;
+var PIN_HEIGHT = 87;
+var SHIFT_PIN_X = 25;
+var SHIFT_PIN_Y = 70;
 
 var notice = document.querySelector('.notice');
 var inputFields = notice.querySelectorAll('fieldset');
@@ -14,8 +16,8 @@ var addressForm = notice.querySelector('#address');
 var mainPin = document.querySelector('.map__pin--main');
 
 var pinCoordinates = {
-  x: Math.round(mainPin.offsetLeft + PINWIDTH / 2),
-  y: Math.round(mainPin.offsetTop + PINHEIGHT / 2)
+  x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
+  y: Math.round(mainPin.offsetTop + PIN_HEIGHT / 2)
 };
 
 // ----- Функция ввода адреса
@@ -132,6 +134,13 @@ var generateObjectList = function () {
 // ----- Запускаю функцию генерации объектов
 var objectList = generateObjectList();
 
+// ----- Функция слушателя записывающая айди пина
+var toClosure = function (j) {
+  return function handler() {
+    return generateCard(objectList[j]);
+  };
+};
+
 // ----- Функция вывода пинов на карту
 var drawPins = function (objects) {
   var templatePin = document.querySelector('#pin').content.querySelector('button');
@@ -139,21 +148,14 @@ var drawPins = function (objects) {
 
   for (var i = 0; i < objects.length; i++) {
     var element = templatePin.cloneNode(true);
-    element.style.left = objects[i].location.x + 25 + 'px';
-    element.style.top = objects[i].location.y + 70 + 'px';
+    element.style.left = objects[i].location.x + SHIFT_PIN_X + 'px';
+    element.style.top = objects[i].location.y + SHIFT_PIN_Y + 'px';
     element.children[0].src = objects[i].author.avatar;
     element.children[0].alt = objects[i].offer.title;
     fragment.appendChild(element);
 
     // Добавляю слушателя по клику чтобы записать айди пина
-    element.addEventListener(
-        'click',
-        (function toClosure(j) {
-          return function handler() {
-            return generateCard(objectList[j]);
-          };
-        })(i)
-    );
+    element.addEventListener('click', toClosure(i));
   }
   return mapArea.appendChild(fragment);
 };
@@ -207,20 +209,13 @@ var generateCard = function (object) {
   // ----- Возвращаю вывод на страницу
   var closeButton = card.querySelector('.popup__close');
   closeButton.addEventListener('click', function () {
-    closePopup();
+    map.querySelector('.map__card').remove();
   });
   return map.insertBefore(card, map.querySelector('.map__filters-container'));
 };
 
-// ----- Функция закрытия попапа
-function closePopup() {
-  var addedCard = map.querySelector('.map__card');
-  addedCard.remove();
-}
-
 // ----- Перемещение главной метки
-
-mainPin.addEventListener('mouseup', function () {
+mainPin.addEventListener('click', function () {
   enablePageState();
   fillAddressField();
   // ----- Отрисовываю пины
