@@ -253,11 +253,11 @@ timeOut.addEventListener('change', function (event) {
 // <template id="success"></template>
 
 var submitBtn = notice.querySelector('.ad-form__submit');
-submitBtn.addEventListener('click', function (event) {
-  // event.preventDefault();
-  console.log('Yo!');
-  main.appendChild(successMessage);
-});
+// submitBtn.addEventListener('click', function (event) {
+//   // event.preventDefault();
+//   console.log('Yo!');
+//   main.appendChild(successMessage);
+// });
 
 var successMessage = document.querySelector('#success').content.querySelector('.success');
 
