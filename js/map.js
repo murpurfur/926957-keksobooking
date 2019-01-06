@@ -222,14 +222,15 @@ mainPin.addEventListener('click', function () {
 });
 
 // ----- Мапа для мин цены в зависимости от типа
+var title = notice.querySelector('#title');
+var type = notice.querySelector('#type');
+var price = notice.querySelector('#price');
 var typePriceMap = {
   bungalo: '0',
   flat: '1000',
   house: '5000',
   palace: '10000'
 };
-var type = notice.querySelector('#type');
-var price = notice.querySelector('#price');
 
 // ----- Изменение мин стоимости от типа объекта
 type.addEventListener('change', function (event) {
@@ -237,7 +238,7 @@ type.addEventListener('change', function (event) {
   price.min = typePriceMap[event.target.value];
 });
 
-// ----- Валидация времени заезда/выезда
+// ----- Автоподставление времени заезда/выезда
 var timeIn = notice.querySelector('#timein');
 var timeOut = notice.querySelector('#timeout');
 
@@ -249,19 +250,14 @@ timeOut.addEventListener('change', function (event) {
   timeIn.value = event.target.value;
 });
 
-// ----- Валидация кнопки отправки формы
-// <template id="success"></template>
-
-var submitBtn = notice.querySelector('.ad-form__submit');
-// submitBtn.addEventListener('click', function (event) {
-//   // event.preventDefault();
-//   console.log('Yo!');
-//   main.appendChild(successMessage);
-// });
-
+// ----- Реакция на отправку формы
 var successMessage = document.querySelector('#success').content.querySelector('.success');
-
-form.addEventListener('submit', function () {
-  main.appendChild(successMessage);
-  console.log('Hoi!');
+var errorMessage = document.querySelector('#error').content.querySelector('.error');
+form.addEventListener('submit', function (event) {
+  event.preventDefault();
+  if (form.checkValidity()) {
+    main.appendChild(successMessage);
+  } else {
+    main.appendChild(errorMessage);
+  }
 });
