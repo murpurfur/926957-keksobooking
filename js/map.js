@@ -8,12 +8,15 @@ var PIN_HEIGHT = 87;
 var SHIFT_PIN_X = 25;
 var SHIFT_PIN_Y = 70;
 
-var notice = document.querySelector('.notice');
-var inputFields = notice.querySelectorAll('fieldset');
+var main = document.querySelector('main');
+var mainPin = document.querySelector('.map__pin--main');
 var mapFilterFields = document.querySelectorAll('.map__filter');
 var adForm = document.querySelector('.ad-form');
+var notice = document.querySelector('.notice');
+var inputFields = notice.querySelectorAll('fieldset');
 var addressForm = notice.querySelector('#address');
-var mainPin = document.querySelector('.map__pin--main');
+
+var form = notice.querySelector('.ad-form');
 
 var pinCoordinates = {
   x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
@@ -163,13 +166,13 @@ var generateCard = function (object) {
   card.querySelector('.popup__text--address').textContent = object.offer.address;
   card.querySelector('.popup__text--price').textContent = object.offer.price + '₽/ночь';
   // ----- Мапа для типов
-  var objectTypes = {
+  var objectTypesMap = {
     bungalo: 'Бунгало',
     flat: 'Квартира',
     house: 'Дом',
     palace: 'Дворец'
   };
-  card.querySelector('.popup__type').textContent = objectTypes[object.offer.type];
+  card.querySelector('.popup__type').textContent = objectTypesMap[object.offer.type];
   card.querySelector('.popup__text--capacity').textContent =
     object.offer.rooms + ' комнаты для ' + object.offer.guests + ' гостей';
   card.querySelector('.popup__text--time').textContent =
@@ -216,4 +219,44 @@ mainPin.addEventListener('click', function () {
   fillAddressField();
   // ----- Отрисовываю пины
   drawPins(objectList);
+});
+
+// ----- Мапа для мин цены в зависимости от типа
+var type = notice.querySelector('#type');
+var price = notice.querySelector('#price');
+var typePriceMap = {
+  bungalo: '0',
+  flat: '1000',
+  house: '5000',
+  palace: '10000'
+};
+
+// ----- Изменение мин стоимости от типа объекта
+type.addEventListener('change', function (event) {
+  price.placeholder = typePriceMap[event.target.value];
+  price.min = typePriceMap[event.target.value];
+});
+
+// ----- Автоподставление времени заезда/выезда
+var timeIn = notice.querySelector('#timein');
+var timeOut = notice.querySelector('#timeout');
+
+timeIn.addEventListener('change', function (event) {
+  timeOut.value = event.target.value;
+});
+
+timeOut.addEventListener('change', function (event) {
+  timeIn.value = event.target.value;
+});
+
+// ----- Реакция на отправку формы
+var successMessage = document.querySelector('#success').content.querySelector('.success');
+var errorMessage = document.querySelector('#error').content.querySelector('.error');
+form.addEventListener('submit', function (event) {
+  event.preventDefault();
+  if (form.checkValidity()) {
+    main.appendChild(successMessage);
+  } else {
+    main.appendChild(errorMessage);
+  }
 });
