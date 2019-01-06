@@ -222,7 +222,6 @@ mainPin.addEventListener('click', function () {
 });
 
 // ----- Мапа для мин цены в зависимости от типа
-var title = notice.querySelector('#title');
 var type = notice.querySelector('#type');
 var price = notice.querySelector('#price');
 var typePriceMap = {
