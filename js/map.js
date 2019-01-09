@@ -10,6 +10,7 @@ var SHIFT_PIN_Y = 70;
 
 var main = document.querySelector('main');
 var mainPin = document.querySelector('.map__pin--main');
+var mapPins = document.querySelector('.map__pins');
 var mapFilterFields = document.querySelectorAll('.map__filter');
 var adForm = document.querySelector('.ad-form');
 var notice = document.querySelector('.notice');
@@ -18,17 +19,10 @@ var addressForm = notice.querySelector('#address');
 
 var form = notice.querySelector('.ad-form');
 
-var pinCoordinates = {
+var pinCoords = {
   x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
   y: Math.round(mainPin.offsetTop + PIN_HEIGHT / 2)
 };
-
-// ----- Функция ввода адреса
-var fillAddressField = function () {
-  addressForm.value = pinCoordinates.x + ', ' + pinCoordinates.y;
-};
-
-fillAddressField();
 
 // ----- Функция чтобы задизейблить или раздизейблить поля
 var toggleFieldsDisabled = function (fields, status) {
@@ -213,17 +207,69 @@ function closePopup() {
   addedCard.remove();
 }
 
+// ----- Функция ввода адреса
+var fillAddressField = function () {
+  addressForm.value = pinCoords.x + ', ' + pinCoords.y;
+};
+
+fillAddressField();
+
 // ----- Перемещение главной метки
-mainPin.addEventListener('click', function () {
-  enablePageState();
-  fillAddressField();
-  // ----- Отрисовываю пины
-  drawPins(objectList);
+mainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var top = mainPin.offsetTop - shift.y;
+    var left = mainPin.offsetLeft - shift.x;
+    var rect = mapPins.getBoundingClientRect();
+
+    if (top < 130) {
+      mainPin.style.top = 130 + 'px';
+    } else if (top > 630) {
+      mainPin.style.top = 630 + 'px';
+    } else if (left < 0) {
+      mainPin.style.left = 0;
+    } else if (left > rect.width - PIN_WIDTH) {
+      mainPin.style.left = rect.width - PIN_WIDTH;
+    } else {
+      mainPin.style.top = mainPin.offsetTop - shift.y + 'px';
+      mainPin.style.left = mainPin.offsetLeft - shift.x + 'px';
+    }
+  };
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    pinCoords.x = startCoords.x;
+    pinCoords.y = startCoords.y;
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+    enablePageState();
+    fillAddressField();
+
+    // ----- Отрисовываю пины
+    drawPins(objectList);
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
 
 // ----- Мапа для мин цены в зависимости от типа
-var type = notice.querySelector('#type');
-var price = notice.querySelector('#price');
+var typeForm = notice.querySelector('#type');
+var priceForm = notice.querySelector('#price');
 var typePriceMap = {
   bungalo: '0',
   flat: '1000',
@@ -232,28 +278,28 @@ var typePriceMap = {
 };
 
 // ----- Изменение мин стоимости от типа объекта
-type.addEventListener('change', function (event) {
-  price.placeholder = typePriceMap[event.target.value];
-  price.min = typePriceMap[event.target.value];
+typeForm.addEventListener('change', function (evt) {
+  priceForm.placeholder = typePriceMap[evt.target.value];
+  priceForm.min = typePriceMap[evt.target.value];
 });
 
 // ----- Автоподставление времени заезда/выезда
 var timeIn = notice.querySelector('#timein');
 var timeOut = notice.querySelector('#timeout');
 
-timeIn.addEventListener('change', function (event) {
-  timeOut.value = event.target.value;
+timeIn.addEventListener('change', function (evt) {
+  timeOut.value = evt.target.value;
 });
 
-timeOut.addEventListener('change', function (event) {
-  timeIn.value = event.target.value;
+timeOut.addEventListener('change', function (evt) {
+  timeIn.value = evt.target.value;
 });
 
 // ----- Реакция на отправку формы
 var successMessage = document.querySelector('#success').content.querySelector('.success');
 var errorMessage = document.querySelector('#error').content.querySelector('.error');
-form.addEventListener('submit', function (event) {
-  event.preventDefault();
+form.addEventListener('submit', function (evt) {
+  evt.preventDefault();
   if (form.checkValidity()) {
     main.appendChild(successMessage);
   } else {
