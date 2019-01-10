@@ -7,28 +7,24 @@ var PIN_WIDTH = 65;
 var PIN_HEIGHT = 87;
 var SHIFT_PIN_X = 25;
 var SHIFT_PIN_Y = 70;
+var MAP_TOP = 130;
+var MAP_BOTTOM = 630;
 
 var main = document.querySelector('main');
 var mainPin = document.querySelector('.map__pin--main');
+var mapPins = document.querySelector('.map__pins');
 var mapFilterFields = document.querySelectorAll('.map__filter');
 var adForm = document.querySelector('.ad-form');
 var notice = document.querySelector('.notice');
 var inputFields = notice.querySelectorAll('fieldset');
-var addressForm = notice.querySelector('#address');
+var addressField = notice.querySelector('#address');
 
 var form = notice.querySelector('.ad-form');
 
-var pinCoordinates = {
+var objectCoords = {
   x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
   y: Math.round(mainPin.offsetTop + PIN_HEIGHT / 2)
 };
-
-// ----- Функция ввода адреса
-var fillAddressField = function () {
-  addressForm.value = pinCoordinates.x + ', ' + pinCoordinates.y;
-};
-
-fillAddressField();
 
 // ----- Функция чтобы задизейблить или раздизейблить поля
 var toggleFieldsDisabled = function (fields, status) {
@@ -213,17 +209,69 @@ function closePopup() {
   addedCard.remove();
 }
 
+// ----- Функция ввода адреса
+var fillAddressField = function () {
+  addressField.value = objectCoords.x + ', ' + objectCoords.y;
+};
+
+fillAddressField();
+
+var pinsAreDrawn = false;
 // ----- Перемещение главной метки
-mainPin.addEventListener('click', function () {
-  enablePageState();
-  fillAddressField();
-  // ----- Отрисовываю пины
-  drawPins(objectList);
+mainPin.addEventListener('mousedown', function (downEvt) {
+  downEvt.preventDefault();
+  var pinCoords = {
+    x: downEvt.clientX,
+    y: downEvt.clientY
+  };
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      x: pinCoords.x - moveEvt.clientX,
+      y: pinCoords.y - moveEvt.clientY
+    };
+    pinCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+    var newPinTop = mainPin.offsetTop - shift.y;
+    var newPinLeft = mainPin.offsetLeft - shift.x;
+    var rect = mapPins.getBoundingClientRect();
+
+    if (newPinTop < MAP_TOP) {
+      newPinTop = MAP_TOP;
+    } else if (newPinTop > MAP_BOTTOM) {
+      newPinTop = MAP_BOTTOM;
+    }
+    if (newPinLeft < 0) {
+      newPinLeft = 0;
+    } else if (newPinLeft > rect.width - PIN_WIDTH) {
+      newPinLeft = rect.width - PIN_WIDTH;
+    }
+    mainPin.style.top = newPinTop + 'px';
+    mainPin.style.left = newPinLeft + 'px';
+  };
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    if (!pinsAreDrawn) {
+      drawPins(objectList);
+    }
+    pinsAreDrawn = true;
+    objectCoords.x = pinCoords.x;
+    objectCoords.y = pinCoords.y;
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+    enablePageState();
+    fillAddressField();
+    // ----- Отрисовываю пины
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
 
 // ----- Мапа для мин цены в зависимости от типа
-var type = notice.querySelector('#type');
-var price = notice.querySelector('#price');
+var typeSelect = notice.querySelector('#type');
+var priceField = notice.querySelector('#price');
 var typePriceMap = {
   bungalo: '0',
   flat: '1000',
@@ -232,28 +280,28 @@ var typePriceMap = {
 };
 
 // ----- Изменение мин стоимости от типа объекта
-type.addEventListener('change', function (event) {
-  price.placeholder = typePriceMap[event.target.value];
-  price.min = typePriceMap[event.target.value];
+typeSelect.addEventListener('change', function (evt) {
+  priceField.placeholder = typePriceMap[evt.target.value];
+  priceField.min = typePriceMap[evt.target.value];
 });
 
 // ----- Автоподставление времени заезда/выезда
 var timeIn = notice.querySelector('#timein');
 var timeOut = notice.querySelector('#timeout');
 
-timeIn.addEventListener('change', function (event) {
-  timeOut.value = event.target.value;
+timeIn.addEventListener('change', function (evt) {
+  timeOut.value = evt.target.value;
 });
 
-timeOut.addEventListener('change', function (event) {
-  timeIn.value = event.target.value;
+timeOut.addEventListener('change', function (evt) {
+  timeIn.value = evt.target.value;
 });
 
 // ----- Реакция на отправку формы
 var successMessage = document.querySelector('#success').content.querySelector('.success');
 var errorMessage = document.querySelector('#error').content.querySelector('.error');
-form.addEventListener('submit', function (event) {
-  event.preventDefault();
+form.addEventListener('submit', function (evt) {
+  evt.preventDefault();
   if (form.checkValidity()) {
     main.appendChild(successMessage);
   } else {
