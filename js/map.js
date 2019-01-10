@@ -17,7 +17,7 @@ var mapFilterFields = document.querySelectorAll('.map__filter');
 var adForm = document.querySelector('.ad-form');
 var notice = document.querySelector('.notice');
 var inputFields = notice.querySelectorAll('fieldset');
-var addressForm = notice.querySelector('#address');
+var addressField = notice.querySelector('#address');
 
 var form = notice.querySelector('.ad-form');
 
@@ -211,11 +211,12 @@ function closePopup() {
 
 // ----- Функция ввода адреса
 var fillAddressField = function () {
-  addressForm.value = objectCoords.x + ', ' + objectCoords.y;
+  addressField.value = objectCoords.x + ', ' + objectCoords.y;
 };
 
 fillAddressField();
 
+var pinsAreDrawn = false;
 // ----- Перемещение главной метки
 mainPin.addEventListener('mousedown', function (downEvt) {
   downEvt.preventDefault();
@@ -241,7 +242,8 @@ mainPin.addEventListener('mousedown', function (downEvt) {
       newPinTop = MAP_TOP;
     } else if (newPinTop > MAP_BOTTOM) {
       newPinTop = MAP_BOTTOM;
-    } else if (newPinLeft < 0) {
+    }
+    if (newPinLeft < 0) {
       newPinLeft = 0;
     } else if (newPinLeft > rect.width - PIN_WIDTH) {
       newPinLeft = rect.width - PIN_WIDTH;
@@ -251,6 +253,10 @@ mainPin.addEventListener('mousedown', function (downEvt) {
   };
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
+    if (!pinsAreDrawn) {
+      drawPins(objectList);
+    }
+    pinsAreDrawn = true;
     objectCoords.x = pinCoords.x;
     objectCoords.y = pinCoords.y;
     document.removeEventListener('mousemove', onMouseMove);
@@ -258,15 +264,14 @@ mainPin.addEventListener('mousedown', function (downEvt) {
     enablePageState();
     fillAddressField();
     // ----- Отрисовываю пины
-    drawPins(objectList);
   };
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
 });
 
 // ----- Мапа для мин цены в зависимости от типа
-var typeForm = notice.querySelector('#type');
-var priceForm = notice.querySelector('#price');
+var typeSelect = notice.querySelector('#type');
+var priceField = notice.querySelector('#price');
 var typePriceMap = {
   bungalo: '0',
   flat: '1000',
@@ -275,9 +280,9 @@ var typePriceMap = {
 };
 
 // ----- Изменение мин стоимости от типа объекта
-typeForm.addEventListener('change', function (evt) {
-  priceForm.placeholder = typePriceMap[evt.target.value];
-  priceForm.min = typePriceMap[evt.target.value];
+typeSelect.addEventListener('change', function (evt) {
+  priceField.placeholder = typePriceMap[evt.target.value];
+  priceField.min = typePriceMap[evt.target.value];
 });
 
 // ----- Автоподставление времени заезда/выезда
