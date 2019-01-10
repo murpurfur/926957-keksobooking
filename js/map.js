@@ -7,6 +7,8 @@ var PIN_WIDTH = 65;
 var PIN_HEIGHT = 87;
 var SHIFT_PIN_X = 25;
 var SHIFT_PIN_Y = 70;
+var MAP_TOP = 130;
+var MAP_BOTTOM = 630;
 
 var main = document.querySelector('main');
 var mainPin = document.querySelector('.map__pin--main');
@@ -19,7 +21,7 @@ var addressForm = notice.querySelector('#address');
 
 var form = notice.querySelector('.ad-form');
 
-var pinCoords = {
+var objectCoords = {
   x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
   y: Math.round(mainPin.offsetTop + PIN_HEIGHT / 2)
 };
@@ -209,57 +211,53 @@ function closePopup() {
 
 // ----- Функция ввода адреса
 var fillAddressField = function () {
-  addressForm.value = pinCoords.x + ', ' + pinCoords.y;
+  addressForm.value = objectCoords.x + ', ' + objectCoords.y;
 };
 
 fillAddressField();
 
 // ----- Перемещение главной метки
-mainPin.addEventListener('mousedown', function (evt) {
-  evt.preventDefault();
-  var startCoords = {
-    x: evt.clientX,
-    y: evt.clientY
+mainPin.addEventListener('mousedown', function (downEvt) {
+  downEvt.preventDefault();
+  var pinCoords = {
+    x: downEvt.clientX,
+    y: downEvt.clientY
   };
   var onMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
-
     var shift = {
-      x: startCoords.x - moveEvt.clientX,
-      y: startCoords.y - moveEvt.clientY
+      x: pinCoords.x - moveEvt.clientX,
+      y: pinCoords.y - moveEvt.clientY
     };
-
-    startCoords = {
+    pinCoords = {
       x: moveEvt.clientX,
       y: moveEvt.clientY
     };
-
     var top = mainPin.offsetTop - shift.y;
     var left = mainPin.offsetLeft - shift.x;
     var rect = mapPins.getBoundingClientRect();
 
-    if (top < 130) {
-      mainPin.style.top = 130 + 'px';
-    } else if (top > 630) {
-      mainPin.style.top = 630 + 'px';
+    if (top < MAP_TOP) {
+      mainPin.style.top = MAP_TOP + 'px';
+    } else if (top > MAP_BOTTOM) {
+      mainPin.style.top = MAP_BOTTOM + 'px';
     } else if (left < 0) {
       mainPin.style.left = 0;
     } else if (left > rect.width - PIN_WIDTH) {
       mainPin.style.left = rect.width - PIN_WIDTH;
     } else {
-      mainPin.style.top = mainPin.offsetTop - shift.y + 'px';
-      mainPin.style.left = mainPin.offsetLeft - shift.x + 'px';
+      mainPin.style.top = top + 'px';
+      mainPin.style.left = left + 'px';
     }
   };
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-    pinCoords.x = startCoords.x;
-    pinCoords.y = startCoords.y;
+    objectCoords.x = pinCoords.x;
+    objectCoords.y = pinCoords.y;
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
     enablePageState();
     fillAddressField();
-
     // ----- Отрисовываю пины
     drawPins(objectList);
   };
