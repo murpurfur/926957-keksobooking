@@ -1,5 +1,5 @@
-'use strict'
-;(function () {
+'use strict';
+(function () {
   var inputFields = window.utils.notice.querySelectorAll('fieldset');
   var adForm = document.querySelector('.ad-form');
   var mapFilterFields = document.querySelectorAll('.map__filter');

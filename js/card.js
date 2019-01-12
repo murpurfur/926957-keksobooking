@@ -1,5 +1,5 @@
-'use strict'
-;(function () {
+'use strict';
+(function () {
   // ----- Функция для наполнения карточки объекта
   var generateCard = function (object) {
     var addedCard = window.utils.map.querySelector('.map__card, .popup');

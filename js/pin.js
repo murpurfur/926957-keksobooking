@@ -1,5 +1,5 @@
-'use strict'
-;(function () {
+'use strict';
+(function () {
   var SHIFT_PIN_X = 25;
   var SHIFT_PIN_Y = 70;
 

@@ -1,5 +1,5 @@
-'use strict'
-;(function () {
+'use strict';
+(function () {
   // ----- Функция генерации случайного числа от и до
   var getRandomValue = function (start, end) {
     return Math.floor(Math.random() * end + start);

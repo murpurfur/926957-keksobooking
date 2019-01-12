@@ -1,5 +1,5 @@
-'use strict'
-;(function () {
+'use strict';
+(function () {
   var map = document.querySelector('.map');
   var mapArea = document.querySelector('.map__pins');
   var notice = document.querySelector('.notice');
