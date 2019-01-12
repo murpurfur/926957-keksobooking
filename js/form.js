@@ -1,9 +1,4 @@
 'use strict'
-//
-//
-//
-//
-// —————————————————————— form.js
 ;(function () {
   var form = window.utils.notice.querySelector('.ad-form');
   var main = document.querySelector('main');

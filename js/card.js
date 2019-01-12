@@ -1,9 +1,4 @@
 'use strict'
-//
-//
-//
-//
-// —————————————————————— card.js
 ;(function () {
   // ----- Функция для наполнения карточки объекта
   var generateCard = function (object) {
@@ -69,5 +64,5 @@
     addedCard.remove();
   }
 
-  window.card = generateCard;
+  window.generateCard = generateCard;
 })();

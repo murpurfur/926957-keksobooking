@@ -1,9 +1,4 @@
 'use strict'
-//
-//
-//
-//
-// —————————————————————— pin.js
 ;(function () {
   var SHIFT_PIN_X = 25;
   var SHIFT_PIN_Y = 70;
@@ -11,7 +6,7 @@
   // ----- Функция слушателя записывающая айди пина
   var toClosure = function (j) {
     return function handler() {
-      window.card(window.data[j]);
+      window.generateCard(window.objectList[j]);
     };
   };
 
@@ -33,5 +28,5 @@
     }
     return window.utils.mapArea.appendChild(fragment);
   };
-  window.pins = drawPins;
+  window.drawPins = drawPins;
 })();

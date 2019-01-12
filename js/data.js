@@ -1,8 +1,4 @@
 'use strict'
-//
-//
-//
-// —————————————————————— data.js
 ;(function () {
   // ----- Функция генерации случайного числа от и до
   var getRandomValue = function (start, end) {
@@ -78,5 +74,5 @@
 
   // ----- Запускаю функцию генерации объектов
   var objectList = generateObjectList();
-  window.data = objectList;
+  window.objectList = objectList;
 })();

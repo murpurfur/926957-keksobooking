@@ -1,8 +1,4 @@
 'use strict'
-//
-//
-//
-// —————————————————————— utils.js
 ;(function () {
   var map = document.querySelector('.map');
   var mapArea = document.querySelector('.map__pins');
