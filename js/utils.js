@@ -5,7 +5,7 @@
   var notice = document.querySelector('.notice');
   var addressField = notice.querySelector('#address');
 
-  // ----- Функция ввода адреса
+  // ---- Функция ввода адреса
   var fillAddressField = function (x, y) {
     addressField.value = x + ', ' + y;
   };
