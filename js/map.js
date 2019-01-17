@@ -17,6 +17,13 @@
     y: Math.round(mainPin.offsetTop + PIN_HEIGHT / 2)
   };
 
+  // ----- Функция вывода ошибки
+  var showError = function (text) {
+    var errorMessage = document.querySelector('#error').content.querySelector('.error');
+    errorMessage.children[0].textContent = text;
+    window.main.appendChild(errorMessage);
+  };
+
   // ----- Заполнить инпут адреса координатой метки
   window.utils.fillAddressField(objectCoords.x, objectCoords.y);
 
@@ -79,23 +86,16 @@
     };
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-      var showError = function (text) {
-        var errorMessage = document.querySelector('#error').content.querySelector('.error');
-        errorMessage.children[0].textContent = text;
-        window.main.appendChild(errorMessage);
-      };
       if (!pinsAreDrawn) {
         window.load(window.drawPins, showError);
+        pinsAreDrawn = true;
       }
-
-      pinsAreDrawn = true;
       objectCoords.x = pinCoords.x;
       objectCoords.y = pinCoords.y;
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
       enablePageState();
       window.utils.fillAddressField(objectCoords.x, objectCoords.y);
-      // ----- Отрисовываю пины
     };
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
