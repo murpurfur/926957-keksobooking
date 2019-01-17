@@ -79,7 +79,7 @@
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       if (!pinsAreDrawn) {
-        window.drawPins(window.objectList);
+        window.load(window.drawPins);
       }
       pinsAreDrawn = true;
       objectCoords.x = pinCoords.x;

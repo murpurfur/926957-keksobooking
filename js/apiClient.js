@@ -6,6 +6,7 @@
     xhr.responseType = 'json';
     xhr.open('GET', URL);
     xhr.addEventListener('load', function () {
+      window.objectList = xhr.response;
       onSuccess(xhr.response);
     });
     xhr.send();
