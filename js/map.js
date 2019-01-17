@@ -79,12 +79,13 @@
     };
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
+      var showError = function (text) {
+        var errorMessage = document.querySelector('#error').content.querySelector('.error');
+        errorMessage.children[0].textContent = text;
+        window.main.appendChild(errorMessage);
+      };
       if (!pinsAreDrawn) {
-        window.load(window.drawPins, function (text) {
-          var errorMessage = document.querySelector('#error').content.querySelector('.error');
-          errorMessage.children[0].textContent = text;
-          window.main.appendChild(errorMessage);
-        });
+        window.load(window.drawPins, showError);
       }
 
       pinsAreDrawn = true;
