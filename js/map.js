@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  window.main = document.querySelector('main');
   var inputFields = window.utils.notice.querySelectorAll('fieldset');
   var adForm = document.querySelector('.ad-form');
   var mapFilterFields = document.querySelectorAll('.map__filter');
@@ -79,8 +80,13 @@
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       if (!pinsAreDrawn) {
-        window.load(window.drawPins);
+        window.load(window.drawPins, function (text) {
+          var errorMessage = document.querySelector('#error').content.querySelector('.error');
+          errorMessage.children[0].textContent = text;
+          window.main.appendChild(errorMessage);
+        });
       }
+
       pinsAreDrawn = true;
       objectCoords.x = pinCoords.x;
       objectCoords.y = pinCoords.y;

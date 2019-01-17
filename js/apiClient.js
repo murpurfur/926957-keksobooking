@@ -6,12 +6,14 @@
     xhr.responseType = 'json';
     xhr.open('GET', URL);
     xhr.addEventListener('load', function () {
-      window.objectList = xhr.response;
-      onSuccess(xhr.response);
+      if (xhr.status === 200) {
+        window.objectList = xhr.response;
+        onSuccess(xhr.response);
+      } else {
+        onError('Ошибка загрузки данных. Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+      }
     });
     xhr.send();
-    console.log(xhr.response);
   };
-
 })();
 
