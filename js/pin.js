@@ -6,7 +6,7 @@
   // ----- Функция слушателя записывающая айди пина
   var toClosure = function (j) {
     return function handler() {
-      window.generateCard(window.objectList[j]);
+      window.generateCard(j);
     };
   };
 
@@ -24,7 +24,7 @@
       fragment.appendChild(element);
 
       // Добавляю слушателя по клику чтобы записать айди пина
-      element.addEventListener('click', toClosure(i));
+      element.addEventListener('click', toClosure(objects[i]));
     }
     return window.utils.mapArea.appendChild(fragment);
   };
