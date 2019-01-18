@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  window.main = document.querySelector('main');
   var inputFields = window.utils.notice.querySelectorAll('fieldset');
   var adForm = document.querySelector('.ad-form');
   var mapFilterFields = document.querySelectorAll('.map__filter');
@@ -11,13 +12,20 @@
   var MAP_TOP = 130;
   var MAP_BOTTOM = 630;
 
-  var objectCoords = {
+  var adCoords = {
     x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
     y: Math.round(mainPin.offsetTop + PIN_HEIGHT / 2)
   };
 
+  // ----- Функция вывода ошибки
+  var showError = function (text) {
+    var errorMessage = document.querySelector('#error').content.querySelector('.error');
+    errorMessage.firstChild.textContent = text;
+    window.main.appendChild(errorMessage);
+  };
+
   // ----- Заполнить инпут адреса координатой метки
-  window.utils.fillAddressField(objectCoords.x, objectCoords.y);
+  window.utils.fillAddressField(adCoords.x, adCoords.y);
 
   // ----- Функция чтобы задизейблить или раздизейблить поля
   var toggleFieldsDisabled = function (fields, status) {
@@ -79,16 +87,15 @@
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       if (!pinsAreDrawn) {
-        window.drawPins(window.objectList);
+        window.load(window.drawPins, showError);
+        pinsAreDrawn = true;
       }
-      pinsAreDrawn = true;
-      objectCoords.x = pinCoords.x;
-      objectCoords.y = pinCoords.y;
+      adCoords.x = pinCoords.x;
+      adCoords.y = pinCoords.y;
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
       enablePageState();
-      window.utils.fillAddressField(objectCoords.x, objectCoords.y);
-      // ----- Отрисовываю пины
+      window.utils.fillAddressField(adCoords.x, adCoords.y);
     };
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
