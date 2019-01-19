@@ -11,13 +11,21 @@
   var PIN_HEIGHT = 87;
   var MAP_TOP = 130;
   var MAP_BOTTOM = 630;
+  var ADS_COUNT = 5;
 
   var adCoords = {
     x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
     y: Math.round(mainPin.offsetTop + PIN_HEIGHT / 2)
   };
 
-  // ----- Функция вывода ошибки
+  // ----- Функция при загрузке данных. Обрезает массив и передает его в функцию отрисовки пинов
+  var onSuccess = function (adsArray) {
+    // !!!!!!!!!! Все-таки сохраняю изначальный массив в объект
+    window.allAds = adsArray;
+    var slicedAds = adsArray.slice(0, ADS_COUNT);
+    window.drawPins(slicedAds);
+  };
+  // ----- Функция вывода ошибки при загрузке данных
   var showError = function (text) {
     var errorMessage = document.querySelector('#error').content.querySelector('.error');
     errorMessage.firstChild.textContent = text;
@@ -87,7 +95,7 @@
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       if (!pinsAreDrawn) {
-        window.load(window.drawPins, showError);
+        window.load(onSuccess, showError);
         pinsAreDrawn = true;
       }
       adCoords.x = pinCoords.x;
