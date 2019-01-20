@@ -11,7 +11,7 @@
   var PIN_HEIGHT = 87;
   var MAP_TOP = 130;
   var MAP_BOTTOM = 630;
-  var ADS_COUNT = 5;
+  // var ADS_COUNT = 5;
 
   var adCoords = {
     x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
@@ -22,8 +22,9 @@
   var onSuccess = function (adsArray) {
     // !!!!!!!!!! Все-таки сохраняю изначальный массив в объект
     window.allAds = adsArray;
-    var slicedAds = adsArray.slice(0, ADS_COUNT);
-    window.drawPins(slicedAds);
+    // var slicedAds = adsArray.slice(0, ADS_COUNT);
+    // window.drawPins(slicedAds);
+    window.drawPins(adsArray);
   };
   // ----- Функция вывода ошибки при загрузке данных
   var showError = function (text) {
