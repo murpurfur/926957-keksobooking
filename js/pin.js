@@ -22,7 +22,7 @@
     });
     var drawnPins = window.utils.mapArea.querySelectorAll('.map__pin');
     console.log(drawnPins);
-    drawnPins.removeChild();
+    drawnPins.removeChild(1);
 
     drawPins(filteredAds);
   }
