@@ -2,7 +2,7 @@
 (function () {
   var SHIFT_PIN_X = 25;
   var SHIFT_PIN_Y = 70;
-  var ADS_COUNT = 10;
+  var ADS_COUNT = 5;
 
   // ----- Функция слушателя записывающая айди пина
   var toClosure = function (adObject) {
@@ -10,38 +10,6 @@
       window.generateCard(adObject);
     };
   };
-
-  // ----- Переменные для фильтрации пинов на карте
-  var mapFilters = document.querySelector('.map__filters');
-  var typeMapFilter = mapFilters.querySelector('#housing-type');
-
-
-  typeMapFilter.addEventListener('change', function (evt) {
-    if (evt.currentTarget.value === 'any') {
-      var filteredAds = window.allAds;
-    } else {
-      filteredAds = window.allAds.filter(function (ad) {
-        return ad.offer.type === evt.currentTarget.value;
-      });
-    }
-
-    // ————— Дублируется из кард.жс Надо вынести в отдельный модуль
-    var addedCard = window.utils.map.querySelector('.map__card, .popup');
-    if (addedCard) {
-      addedCard.remove();
-    }
-
-    var drawnPins = window.utils.mapArea.querySelectorAll('.drawn__pin');
-
-    drawnPins.forEach(function (element) {
-      element.parentNode.removeChild(element);
-    }
-    );
-
-    drawPins(filteredAds);
-  }
-  );
-
 
   // ----- Функция вывода пинов на карту
   var drawPins = function (ads) {
