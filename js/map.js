@@ -11,13 +11,18 @@
   var PIN_HEIGHT = 87;
   var MAP_TOP = 130;
   var MAP_BOTTOM = 630;
-
+  
   var adCoords = {
     x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
     y: Math.round(mainPin.offsetTop + PIN_HEIGHT / 2)
   };
 
-  // ----- Функция вывода ошибки
+  // ----- Функция при загрузке данных. Обрезает массив и передает его в функцию отрисовки пинов
+  var onSuccess = function (adsArray) {
+    window.allAds = adsArray;
+    window.drawPins(adsArray);
+  };
+  // ----- Функция вывода ошибки при загрузке данных
   var showError = function (text) {
     var errorMessage = document.querySelector('#error').content.querySelector('.error');
     errorMessage.firstChild.textContent = text;
@@ -87,7 +92,7 @@
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       if (!pinsAreDrawn) {
-        window.load(window.drawPins, showError);
+        window.load(onSuccess, showError);
         pinsAreDrawn = true;
       }
       adCoords.x = pinCoords.x;
