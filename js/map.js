@@ -20,10 +20,7 @@
 
   // ----- Функция при загрузке данных. Обрезает массив и передает его в функцию отрисовки пинов
   var onSuccess = function (adsArray) {
-    // !!!!!!!!!! Все-таки сохраняю изначальный массив в объект
     window.allAds = adsArray;
-    // var slicedAds = adsArray.slice(0, ADS_COUNT);
-    // window.drawPins(slicedAds);
     window.drawPins(adsArray);
   };
   // ----- Функция вывода ошибки при загрузке данных
