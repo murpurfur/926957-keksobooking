@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var form = window.utils.notice.querySelector('.ad-form');
-
+  var formData = new FormData(form)
   // ----- Мапа для мин цены в зависимости от типа
   var typeSelect = window.utils.notice.querySelector('#type');
   var priceField = window.utils.notice.querySelector('#price');
@@ -40,6 +40,6 @@
     } else {
       window.main.appendChild(errorMessage);
     }
-    window.send(form.data);
+    window.send(formData);
   });
 })();
