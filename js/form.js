@@ -40,5 +40,6 @@
     } else {
       window.main.appendChild(errorMessage);
     }
+    window.send(form.data);
   });
 })();
