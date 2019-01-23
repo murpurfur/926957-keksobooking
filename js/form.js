@@ -37,9 +37,10 @@
     evt.preventDefault();
     if (form.checkValidity()) {
       window.main.appendChild(successMessage);
+      window.send(formData);
     } else {
       window.main.appendChild(errorMessage);
     }
-    window.send(formData);
+
   });
 })();
