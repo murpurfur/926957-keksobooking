@@ -11,7 +11,7 @@
   var PIN_HEIGHT = 87;
   var MAP_TOP = 130;
   var MAP_BOTTOM = 630;
-  
+
   var adCoords = {
     x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
     y: Math.round(mainPin.offsetTop + PIN_HEIGHT / 2)
