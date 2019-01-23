@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var form = window.utils.notice.querySelector('.ad-form');
-  var formData = new FormData(form);
+
   // ----- Мапа для мин цены в зависимости от типа
   var typeSelect = window.utils.notice.querySelector('#type');
   var priceField = window.utils.notice.querySelector('#price');
@@ -30,11 +30,12 @@
     timeIn.value = evt.target.value;
   });
 
-  // ----- Реакция на отправку формы
+  // ----- Отправка формы
   var successMessage = document.querySelector('#success').content.querySelector('.success');
   var errorMessage = document.querySelector('#error').content.querySelector('.error');
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
+    var formData = new FormData(form);
     if (form.checkValidity()) {
       window.main.appendChild(successMessage);
       window.send(formData);
