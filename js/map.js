@@ -25,8 +25,12 @@
   // ----- Функция вывода ошибки при загрузке данных
   var showError = function (text) {
     var errorMessage = document.querySelector('#error').content.querySelector('.error');
-    errorMessage.firstChild.textContent = text;
-    window.main.appendChild(errorMessage);
+    var errorMessageClone = errorMessage.cloneNode(true);
+    errorMessage.children[0].textContent = text;
+    window.main.appendChild(errorMessageClone);
+    var errorButton = document.querySelector('.error__button');
+    var errorPopup = document.querySelector('.error');
+    window.utils.closeErrorPopup(errorPopup, errorButton, window.load.bind(null, onSuccess, showError));
   };
 
   // ----- Заполнить инпут адреса координатой метки

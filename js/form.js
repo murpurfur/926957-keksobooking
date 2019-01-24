@@ -1,7 +1,20 @@
 'use strict';
 (function () {
   var form = window.utils.notice.querySelector('.ad-form');
-
+  // ----- Функция при удачной отправке данных
+  var onSuccess = function () {
+    window.main.appendChild(successMessage);
+  };
+  // ----- Функция вывода ошибки при передаче данных и закрытия окна
+  var showError = function (text) {
+    var errorMessage = document.querySelector('#error').content.querySelector('.error');
+    var errorMessageClone = errorMessage.cloneNode(true);
+    errorMessage.children[0].textContent = text;
+    window.main.appendChild(errorMessageClone);
+    var errorButton = document.querySelector('.error__button');
+    var errorPopup = document.querySelector('.error');
+    window.utils.closeErrorPopup(errorPopup, errorButton);
+  };
   // ----- Мапа для мин цены в зависимости от типа
   var typeSelect = window.utils.notice.querySelector('#type');
   var priceField = window.utils.notice.querySelector('#price');
@@ -37,11 +50,9 @@
     evt.preventDefault();
     var formData = new FormData(form);
     if (form.checkValidity()) {
-      window.main.appendChild(successMessage);
-      window.send(formData);
+      window.send(formData, onSuccess, showError);
     } else {
       window.main.appendChild(errorMessage);
     }
-
   });
 })();
