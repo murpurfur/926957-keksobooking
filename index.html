@@ -188,7 +188,7 @@
             <select id="capacity" name="capacity">
               <option value="3">для 3 гостей</option>
               <option value="2">для 2 гостей</option>
-              <option value="1" selected>для 1 гостя</option>
+              <option value="1" selected pattern="1|2|3">для 1 гостя</option>
               <option value="0">не для гостей</option>
             </select>
           </fieldset>
@@ -349,6 +349,7 @@
     </template>
 
     <script src="js/getData.js"></script>
+    <script src="js/pageReset.js"></script>
     <script src="js/postAd.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/map.js"></script>
