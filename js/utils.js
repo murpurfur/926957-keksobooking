@@ -23,8 +23,8 @@
       evt.preventDefault();
       popup.remove();
     });
-    window.addEventListener('keydown', function (evt) {
-      if (evt.key === 27) {
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === 27) {
         evt.preventDefault();
         popup.remove();
       }
