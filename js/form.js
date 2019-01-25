@@ -50,35 +50,43 @@
   // ----- Ограничение на количество комнат и количество гостей
   var roomNumber = window.utils.notice.querySelector('#room_number');
   var capacity = window.utils.notice.querySelector('#capacity');
-  var roomsCapacityMap = {
-    1: ['1'],
-    2: ['1', '2'],
-    3: ['1', '2', '3'],
-    100: ['0']
-  };
+  // var roomsCapacityMap = {
+  //   1: ['1'],
+  //   2: ['1', '2'],
+  //   3: ['1', '2', '3'],
+  //   100: ['0']
+  // };
 
   roomNumber.addEventListener('change', function (evt) {
-    if (Number(evt.target.value) === 1 && Number(capacity) !== 1) {
+    if (Number(evt.target.value) === 1 && Number(capacity.value) !== 1) {
+      evt.target.setCustomValidity('');
       capacity.setCustomValidity('В одну комнату может заселиться только один гость');
-    } else if (Number(evt.target.value) === 2 && Number(capacity) <= 0 && Number(capacity) >= 2) {
+    } else if (Number(evt.target.value) === 2 && Number(capacity.value) < 1 || Number(capacity.value) > 2) {
+      evt.target.setCustomValidity('');
       capacity.setCustomValidity('В две комнаты могут заселиться только двое или один гость');
-    } else if (Number(evt.target.value) === 3 && Number(capacity) > 0) {
+    } else if (Number(evt.target.value) === 3 && Number(capacity.value) <= 0) {
+      evt.target.setCustomValidity('');
       capacity.setCustomValidity('В три комнаты поместятся один, два или три гостя');
-    } else if (Number(evt.target.value) === 100 && Number(capacity) <= 0) {
+    } else if (Number(evt.target.value) === 100 && Number(capacity.value) > 0) {
+      evt.target.setCustomValidity('');
       capacity.setCustomValidity('Стокомнатная недвижимость не для гостей!');
     } else {
       evt.target.setCustomValidity('');
     }
   });
   capacity.addEventListener('change', function (evt) {
-    if (evt.target.value === '1' && Number(roomNumber) !== 1) {
+    if (Number(evt.target.value) === 1 && Number(roomNumber.value) !== 1) {
+      evt.target.setCustomValidity('');
       roomNumber.setCustomValidity('Для одного гостя подойдет одна, две или три комнаты');
-    } else if (evt.target.value === '2' && Number(roomNumber) >= 2 && Number(roomNumber) < 100) {
+    } else if (Number(evt.target.value) === 2 && Number(roomNumber.value) < 2 || Number(roomNumber.value) >= 100) {
+      evt.target.setCustomValidity('');
       roomNumber.setCustomValidity('Для двух гостей будут впору две или три комнаты');
-    } else if (evt.target.value === '3' && Number(roomNumber) !== 3) {
-      roomNumber.setCustomValidity('Трём гостям подойдут трехкомнатные помещения');
-    } else if (evt.target.value === '0' && Number(roomNumber) !== 100) {
-      roomNumber.setCustomValidity('Сто комнат не для гостей!');
+    } else if (Number(evt.target.value) === 3 && Number(roomNumber.value) !== 3) {
+      evt.target.setCustomValidity('');
+      roomNumber.setCustomValidity('Трём гостям подойдут трёхкомнатные помещения');
+    } else if (Number(evt.target.value) === 0 && Number(roomNumber.value) !== 100) {
+      evt.target.setCustomValidity('');
+      roomNumber.setCustomValidity('Не для гостей можно выбрать только сто комнат!');
     } else {
       evt.target.setCustomValidity('');
     }
