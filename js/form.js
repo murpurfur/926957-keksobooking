@@ -35,6 +35,14 @@
     priceField.min = typePriceMap[evt.target.value];
   });
 
+  // ----- Функция обновления мин стоимости жилья на дефолтное
+  var resetPriceField = function (propertyType) {
+    priceField.min = typePriceMap[propertyType];
+    priceField.placeholder = typePriceMap[propertyType];
+  };
+
+  window.resetPriceField = resetPriceField;
+
   // ----- Автоподставление времени заезда/выезда
   var timeIn = window.utils.notice.querySelector('#timein');
   var timeOut = window.utils.notice.querySelector('#timeout');

@@ -8,6 +8,7 @@
   // ----- Функция перевода страницы в неактивное состояние
   var pageReset = function () {
     form.reset();
+    window.resetPriceField('flat');
     // ----- Очистка превью картинок
     avararPreview.src = 'img/muffin-grey.svg';
     adImagePreview.src = '';
