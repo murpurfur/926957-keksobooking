@@ -82,7 +82,7 @@
   });
   mapFilterFeatures.forEach(function (checkbox) {
     checkbox.addEventListener('input', function (evt) {
-      if (evt.relatedTarget.checked) {
+      if (evt.target.checked) {
         filters.features.push(evt.target.value);
       } else {
         var index = filters.features.indexOf(evt.target.value);
