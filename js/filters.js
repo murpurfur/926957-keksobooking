@@ -8,6 +8,7 @@
   var mapFilterRooms = mapFilters.querySelector('#housing-rooms');
   var mapFilterGuests = mapFilters.querySelector('#housing-guests');
   var mapFilterFeatures = mapFilters.querySelectorAll('.map__checkbox');
+  console.log(mapFilterFeatures);
   var filters = {
     type: 'any',
     price: 'any',
@@ -17,14 +18,14 @@
   };
   var priceFilterMap = {
     low: function (price) {
-      return price <= 10000;
+      return price < 10000;
     },
     middle: function (price) {
-      return price > 10000 && price <= 50000;
+      return price >= 10000 && price < 50000;
     },
     high: function (price) {
-      return price > 50000;
-    },
+      return price >= 50000;
+    }
   };
 
   var removePinsCard = function () {
@@ -37,17 +38,21 @@
       element.parentNode.removeChild(element);
     }
     );
-  }
+  };
 
   var filterPins = function () {
     var filteredAds = window.allAds.filter(function (ad) {
       if (filters.type !== 'any' && ad.offer.type !== filters.type) {
         return false;
-      } else if (filters.price !== 'any' && priceFilterMap[mapFilterPrice.value](ad.offer.price)) {
-        return false;
+      } else if (filters.price !== 'any') {
+        return priceFilterMap[mapFilterPrice.value](ad.offer.price);
       } else if (filters.rooms !== 'any' && ad.offer.rooms.toString() !== filters.rooms) {
         return false;
       } else if (filters.guests !== 'any' && ad.offer.guests.toString() !== filters.guests) {
+        return false;
+      } else if (filters.features.every(function (feature) {
+        ad.offer.features.includes(feature);
+      })) {
         return false;
       }
       return true;
@@ -74,5 +79,20 @@
     filters.guests = evt.target.value;
     removePinsCard();
     window.drawPins(filterPins());
+  });
+  mapFilterFeatures.forEach(function (checkbox) {
+    checkbox.addEventListener('input', function (evt) {
+      if (this.checked) {
+        filters.features.push(evt.target.value);
+        console.log(filters.features);
+      } else {
+        var index = filters.features.indexOf(evt.target.value);
+        if (index >= 0) {
+          filters.features.splice(index, 1);
+        }
+      }
+      removePinsCard();
+      window.drawPins(filterPins());
+    });
   });
 })();
