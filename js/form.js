@@ -50,12 +50,6 @@
   // ----- Ограничение на количество комнат и количество гостей
   var roomNumber = window.utils.notice.querySelector('#room_number');
   var capacity = window.utils.notice.querySelector('#capacity');
-  // var roomsCapacityMap = {
-  //   1: ['1'],
-  //   2: ['1', '2'],
-  //   3: ['1', '2', '3'],
-  //   100: ['0']
-  // };
 
   roomNumber.addEventListener('change', function (evt) {
     if (Number(evt.target.value) === 1 && Number(capacity.value) !== 1) {

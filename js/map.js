@@ -11,6 +11,10 @@
   var PIN_HEIGHT = 87;
   var MAP_TOP = 130;
   var MAP_BOTTOM = 630;
+  var MAIN_PIN_DEFAULT_X = 570;
+  var MAIN_PIN_DEFAULT_Y = 375;
+
+  var pinsAreDrawn = false;
 
   var adCoords = {
     x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
@@ -45,20 +49,33 @@
 
   // ----- Функция перевода в неактивное состояние
   var disablePageState = function () {
+    mainPin.style.left = MAIN_PIN_DEFAULT_X + 'px';
+    mainPin.style.top = MAIN_PIN_DEFAULT_Y + 'px';
     toggleFieldsDisabled(inputFields, true);
     toggleFieldsDisabled(mapFilterFields, true);
+    window.utils.map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+    if (pinsAreDrawn) {
+      var drawnPins = window.utils.mapArea.querySelectorAll('.drawn__pin');
+      drawnPins.forEach(function (element) {
+        element.parentNode.removeChild(element);
+      }
+      );
+      pinsAreDrawn = false;
+    }
   };
+  window.disablePageState = disablePageState;
+  window.disablePageState();
 
-  disablePageState();
-
-  // ----- Функция перевода в активное состояние
+  // ----- Функция перевода карты в активное состояние
   var enablePageState = function () {
     window.utils.map.classList.remove('map--faded');
     toggleFieldsDisabled(mapFilterFields, false);
     adForm.classList.remove('ad-form--disabled');
     toggleFieldsDisabled(inputFields, false);
   };
-  var pinsAreDrawn = false;
+
+
   // ----- Перемещение главной метки
   mainPin.addEventListener('mousedown', function (downEvt) {
     downEvt.preventDefault();
