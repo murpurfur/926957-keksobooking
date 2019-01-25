@@ -146,7 +146,7 @@
           </fieldset>
           <fieldset class="ad-form__element ad-form__element--wide">
             <label class="ad-form__label" for="address">Адрес</label>
-            <input id="address" name="address" type="text" disabled />
+            <input id="address" name="address" type="text" readonly/>
           </fieldset>
           <fieldset class="ad-form__element">
             <label class="ad-form__label" for="type">Тип жилья</label>
@@ -186,9 +186,9 @@
           <fieldset class="ad-form__element">
             <label class="ad-form__label" for="capacity">Количество мест</label>
             <select id="capacity" name="capacity">
-              <option value="3" selected>для 3 гостей</option>
+              <option value="3">для 3 гостей</option>
               <option value="2">для 2 гостей</option>
-              <option value="1">для 1 гостя</option>
+              <option value="1" selected>для 1 гостя</option>
               <option value="0">не для гостей</option>
             </select>
           </fieldset>
@@ -258,7 +258,8 @@
                 <input type="file" id="images" name="images" class="ad-form__input visually-hidden" />
                 <label for="images" class="ad-form__drop-zone">Загрузите или&nbsp;перетащите сюда фото</label>
               </div>
-              <div class="ad-form__photo"></div>
+              <div class="ad-form__photo">
+                <img src="" alt="Фотография жилья" width=100% height=100% class="visually-hidden"/></div>
             </div>
           </fieldset>
           <fieldset class="ad-form__element ad-form__element--submit">
@@ -347,12 +348,13 @@
       </div>
     </template>
 
-    <script src="js/apiClient.js"></script>
     <script src="js/utils.js"></script>
-    <script src="js/data.js"></script>
+    <script src="js/getData.js"></script>
+    <script src="js/pageReset.js"></script>
+    <script src="js/postAd.js"></script>
     <script src="js/map.js"></script>
     <script src="js/filters.js"></script>
-    <script src="js/avatar.js"></script>
+    <script src="js/images.js"></script>
     <script src="js/card.js"></script>
     <script src="js/pin.js"></script>
     <script src="js/form.js"></script>

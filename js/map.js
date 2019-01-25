@@ -11,6 +11,10 @@
   var PIN_HEIGHT = 87;
   var MAP_TOP = 130;
   var MAP_BOTTOM = 630;
+  var MAIN_PIN_DEFAULT_X = 570;
+  var MAIN_PIN_DEFAULT_Y = 375;
+
+  var pinsAreDrawn = false;
 
   var adCoords = {
     x: Math.round(mainPin.offsetLeft + PIN_WIDTH / 2),
@@ -25,8 +29,12 @@
   // ----- Функция вывода ошибки при загрузке данных
   var showError = function (text) {
     var errorMessage = document.querySelector('#error').content.querySelector('.error');
-    errorMessage.firstChild.textContent = text;
-    window.main.appendChild(errorMessage);
+    var errorMessageClone = errorMessage.cloneNode(true);
+    errorMessage.children[0].textContent = text;
+    window.main.appendChild(errorMessageClone);
+    var errorButton = document.querySelector('.error__button');
+    var errorPopup = document.querySelector('.error');
+    window.utils.closeErrorPopup(errorPopup, errorButton, window.load.bind(null, onSuccess, showError));
   };
 
   // ----- Заполнить инпут адреса координатой метки
@@ -41,20 +49,33 @@
 
   // ----- Функция перевода в неактивное состояние
   var disablePageState = function () {
+    mainPin.style.left = MAIN_PIN_DEFAULT_X + 'px';
+    mainPin.style.top = MAIN_PIN_DEFAULT_Y + 'px';
     toggleFieldsDisabled(inputFields, true);
     toggleFieldsDisabled(mapFilterFields, true);
+    window.utils.map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+    if (pinsAreDrawn) {
+      var drawnPins = window.utils.mapArea.querySelectorAll('.drawn__pin');
+      drawnPins.forEach(function (element) {
+        element.parentNode.removeChild(element);
+      }
+      );
+      pinsAreDrawn = false;
+    }
   };
+  window.disablePageState = disablePageState;
+  window.disablePageState();
 
-  disablePageState();
-
-  // ----- Функция перевода в активное состояние
+  // ----- Функция перевода карты в активное состояние
   var enablePageState = function () {
     window.utils.map.classList.remove('map--faded');
     toggleFieldsDisabled(mapFilterFields, false);
     adForm.classList.remove('ad-form--disabled');
     toggleFieldsDisabled(inputFields, false);
   };
-  var pinsAreDrawn = false;
+
+
   // ----- Перемещение главной метки
   mainPin.addEventListener('mousedown', function (downEvt) {
     downEvt.preventDefault();
