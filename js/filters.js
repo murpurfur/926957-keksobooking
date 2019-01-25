@@ -8,7 +8,8 @@
   var mapFilterRooms = mapFilters.querySelector('#housing-rooms');
   var mapFilterGuests = mapFilters.querySelector('#housing-guests');
   var mapFilterFeatures = mapFilters.querySelectorAll('.map__checkbox');
-  console.log(mapFilterFeatures);
+
+  var FILTER_TYPE_ANY = 'any';
   var filters = {
     type: 'any',
     price: 'any',
@@ -21,10 +22,10 @@
       return price > 10000;
     },
     middle: function (price) {
-      return price <= 10000 && price > 50000;
+      return price < 10000 && price > 50000;
     },
     high: function (price) {
-      return price <= 50000;
+      return price < 50000;
     }
   };
 
@@ -42,13 +43,13 @@
 
   var filterPins = function () {
     var filteredAds = window.allAds.filter(function (ad) {
-      if (filters.type !== 'any' && ad.offer.type !== filters.type) {
+      if (filters.type !== FILTER_TYPE_ANY && ad.offer.type !== filters.type) {
         return false;
-      } else if (filters.price !== 'any' && priceFilterMap[mapFilterPrice.value](ad.offer.price)) {
+      } else if (filters.price !== FILTER_TYPE_ANY && priceFilterMap[mapFilterPrice.value](ad.offer.price)) {
         return false;
-      } else if (filters.rooms !== 'any' && ad.offer.rooms.toString() !== filters.rooms) {
+      } else if (filters.rooms !== FILTER_TYPE_ANY && ad.offer.rooms.toString() !== filters.rooms) {
         return false;
-      } else if (filters.guests !== 'any' && ad.offer.guests.toString() !== filters.guests) {
+      } else if (filters.guests !== FILTER_TYPE_ANY && ad.offer.guests.toString() !== filters.guests) {
         return false;
       } else if (filters.features.some(function (feature) {
         return ad.offer.features.indexOf(feature) === -1;
