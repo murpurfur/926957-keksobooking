@@ -1,33 +1,78 @@
 'use strict';
 (function () {
 
-  var FILTER_TYPE_ANY = 'any';
   // ----- Переменные для фильтрации пинов на карте
   var mapFilters = document.querySelector('.map__filters');
-  var typeMapFilter = mapFilters.querySelector('#housing-type');
+  var mapFilterType = mapFilters.querySelector('#housing-type');
+  var mapFilterPrice = mapFilters.querySelector('#housing-price');
+  var mapFilterRooms = mapFilters.querySelector('#housing-rooms');
+  var mapFilterGuests = mapFilters.querySelector('#housing-guests');
+  var mapFilterFeatures = mapFilters.querySelectorAll('.map__checkbox');
+  var filters = {
+    type: 'any',
+    price: 'any',
+    rooms: 'any',
+    guests: 'any',
+    features: []
+  };
+  var priceFilterMap = {
+    low: function (price) {
+      return price <= 10000;
+    },
+    middle: function (price) {
+      return price > 10000 && price <= 50000;
+    },
+    high: function (price) {
+      return price > 50000;
+    },
+  };
 
-  typeMapFilter.addEventListener('change', function (evt) {
-    if (evt.currentTarget.value === FILTER_TYPE_ANY) {
-      var filteredAds = window.allAds;
-    } else {
-      filteredAds = window.allAds.filter(function (ad) {
-        return ad.offer.type === evt.currentTarget.value;
-      });
-    }
+  var removePinsCard = function () {
     var addedCard = window.utils.map.querySelector('.map__card, .popup');
     if (addedCard) {
       addedCard.remove();
     }
-
     var drawnPins = window.utils.mapArea.querySelectorAll('.drawn__pin');
-
     drawnPins.forEach(function (element) {
       element.parentNode.removeChild(element);
     }
     );
-
-    window.drawPins(filteredAds);
   }
-  );
 
+  var filterPins = function () {
+    var filteredAds = window.allAds.filter(function (ad) {
+      if (filters.type !== 'any' && ad.offer.type !== filters.type) {
+        return false;
+      } else if (filters.price !== 'any' && priceFilterMap[mapFilterPrice.value](ad.offer.price)) {
+        return false;
+      } else if (filters.rooms !== 'any' && ad.offer.rooms.toString() !== filters.rooms) {
+        return false;
+      } else if (filters.guests !== 'any' && ad.offer.guests.toString() !== filters.guests) {
+        return false;
+      }
+      return true;
+    });
+    return filteredAds;
+  };
+
+  mapFilterType.addEventListener('change', function (evt) {
+    filters.type = evt.target.value;
+    removePinsCard();
+    window.drawPins(filterPins());
+  });
+  mapFilterPrice.addEventListener('change', function (evt) {
+    filters.price = evt.target.value;
+    removePinsCard();
+    window.drawPins(filterPins());
+  });
+  mapFilterRooms.addEventListener('change', function (evt) {
+    filters.rooms = evt.target.value;
+    removePinsCard();
+    window.drawPins(filterPins());
+  });
+  mapFilterGuests.addEventListener('change', function (evt) {
+    filters.guests = evt.target.value;
+    removePinsCard();
+    window.drawPins(filterPins());
+  });
 })();
