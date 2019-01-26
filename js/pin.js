@@ -5,7 +5,7 @@
   var ADS_COUNT = 5;
 
   // ----- Функция слушателя записывающая айди пина
-  var toClosure = function (adObject) {
+  var makeCardClickHandler = function (adObject) {
     return function handler() {
       window.generateCard(adObject);
     };
@@ -27,7 +27,7 @@
       fragment.appendChild(element);
 
       // Добавляю слушателя по клику чтобы записать айди пина
-      element.addEventListener('click', toClosure(slicedAds[i]));
+      element.addEventListener('click', makeCardClickHandler(slicedAds[i]));
     }
     return window.utils.mapArea.appendChild(fragment);
   };

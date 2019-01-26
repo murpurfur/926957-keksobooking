@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var main = document.querySelector('main');
   var map = document.querySelector('.map');
   var mapArea = document.querySelector('.map__pins');
   var notice = document.querySelector('.notice');
@@ -47,6 +48,7 @@
 
 
   window.utils = {
+    main: main,
     map: map,
     mapArea: mapArea,
     notice: notice,

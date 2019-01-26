@@ -54,15 +54,15 @@
 
     // ----- Возвращаю вывод на страницу
     var closeButton = card.querySelector('.popup__close');
-    closeButton.addEventListener('click', closeCard);
+    closeButton.addEventListener('click', closeCardHandler);
     window.utils.map.insertBefore(card, window.utils.map.querySelector('.map__filters-container'));
   };
 
   // ----- Функция закрытия карточки
-  function closeCard() {
+  var closeCardHandler = function () {
     var addedCard = window.utils.map.querySelector('.map__card');
     addedCard.remove();
-  }
+  };
 
   window.generateCard = generateCard;
 })();

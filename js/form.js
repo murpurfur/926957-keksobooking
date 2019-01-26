@@ -3,7 +3,7 @@
   var form = window.utils.notice.querySelector('.ad-form');
   // ----- Функция при удачной отправке данных
   var onSuccess = function () {
-    window.main.appendChild(successMessage);
+    window.utils.main.appendChild(successMessage);
     window.pageReset();
     var successPopup = document.querySelector('.success');
     window.utils.closeSuccessPopup(successPopup);
@@ -14,7 +14,7 @@
     var errorMessage = document.querySelector('#error').content.querySelector('.error');
     var errorMessageClone = errorMessage.cloneNode(true);
     errorMessage.children[0].textContent = text;
-    window.main.appendChild(errorMessageClone);
+    window.utils.main.appendChild(errorMessageClone);
     var errorButton = document.querySelector('.error__button');
     var errorPopup = document.querySelector('.error');
     window.utils.closeErrorPopup(errorPopup, errorButton);
@@ -22,7 +22,7 @@
   // ----- Мапа для мин цены в зависимости от типа
   var typeSelect = window.utils.notice.querySelector('#type');
   var priceField = window.utils.notice.querySelector('#price');
-  var typePriceMap = {
+  var TypePriceMap = {
     bungalo: '0',
     flat: '1000',
     house: '5000',
@@ -31,14 +31,14 @@
 
   // ----- Изменение мин стоимости от типа объекта
   typeSelect.addEventListener('change', function (evt) {
-    priceField.placeholder = typePriceMap[evt.target.value];
-    priceField.min = typePriceMap[evt.target.value];
+    priceField.placeholder = TypePriceMap[evt.target.value];
+    priceField.min = TypePriceMap[evt.target.value];
   });
 
   // ----- Функция обновления мин стоимости жилья на дефолтное
   var resetPriceField = function (propertyType) {
-    priceField.min = typePriceMap[propertyType];
-    priceField.placeholder = typePriceMap[propertyType];
+    priceField.min = TypePriceMap[propertyType];
+    priceField.placeholder = TypePriceMap[propertyType];
   };
 
   window.resetPriceField = resetPriceField;
@@ -97,7 +97,7 @@
     if (form.checkValidity()) {
       window.send(formData, onSuccess, showError);
     } else {
-      window.main.appendChild(errorMessage);
+      window.utils.main.appendChild(errorMessage);
     }
   });
 })();

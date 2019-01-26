@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var FILTER_TYPE_ANY = 'any';
 
   // ----- Переменные для фильтрации пинов на карте
   var mapFilters = document.querySelector('.map__filters');
@@ -9,7 +10,6 @@
   var mapFilterGuests = mapFilters.querySelector('#housing-guests');
   var mapFilterFeatures = mapFilters.querySelectorAll('.map__checkbox');
 
-  var FILTER_TYPE_ANY = 'any';
   var filters = {
     type: 'any',
     price: 'any',
@@ -17,16 +17,21 @@
     guests: 'any',
     features: []
   };
+
+  var invertLow = function (price) {
+    return price > 10000;
+  };
+  var invertMiddle = function (price) {
+    return price < 10000 || price > 50000;
+  };
+  var invertHigh = function (price) {
+    return price < 50000;
+  };
+
   var priceFilterMap = {
-    low: function (price) {
-      return price > 10000;
-    },
-    middle: function (price) {
-      return price < 10000 && price > 50000;
-    },
-    high: function (price) {
-      return price < 50000;
-    }
+    low: invertLow,
+    middle: invertMiddle,
+    high: invertHigh
   };
 
   var removePinsCard = function () {
@@ -42,7 +47,7 @@
   };
 
   var filterPins = function () {
-    var filteredAds = window.allAds.filter(function (ad) {
+    var filteredAds = window.map.allAds.filter(function (ad) {
       if (filters.type !== FILTER_TYPE_ANY && ad.offer.type !== filters.type) {
         return false;
       } else if (filters.price !== FILTER_TYPE_ANY && priceFilterMap[mapFilterPrice.value](ad.offer.price)) {

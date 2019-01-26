@@ -13,7 +13,7 @@
     avararPreview.src = 'img/muffin-grey.svg';
     adImagePreview.src = '';
     adImagePreview.classList.add('visually-hidden');
-    window.disablePageState();
+    window.map.disablePageState();
   };
   window.pageReset = pageReset;
 })();
