@@ -30,27 +30,33 @@
     // ----- Создаю новый список
     var newUl = document.createElement('ul');
     newUl.classList.add('popup__features');
+    var featuresFragment = document.createDocumentFragment();
+    var newBlankLi = document.createElement('li');
 
     // ----- Создаю строки в списке на основе массива фичей из первого объекта
     for (var k = 0; k < ad.offer.features.length; k++) {
-      var newLi = document.createElement('li');
+      var newLi = newBlankLi.cloneNode(true);
       newLi.classList.add('popup__feature');
       newLi.classList.add('popup__feature--' + ad.offer.features[k]);
-      newUl.appendChild(newLi);
+      featuresFragment.appendChild(newLi);
     }
+    newUl.appendChild(featuresFragment);
+
     card.insertBefore(newUl, card.querySelector('.popup__description'));
 
     // ----- Описание объекта
     card.querySelector('.popup__description').textContent = ad.offer.description;
 
     // ----- Вывод фотографий
-    card.querySelector('.popup__photo').src = ad.offer.photos[0];
     var photosCard = card.querySelector('.popup__photo');
-    for (var p = 1; p < ad.offer.photos.length; p++) {
+    var photosFragment = document.createDocumentFragment();
+    for (var p = 0; p < ad.offer.photos.length; p++) {
       var dupPhotosCard = photosCard.cloneNode(true);
       dupPhotosCard.src = ad.offer.photos[p];
-      card.querySelector('.popup__photos').appendChild(dupPhotosCard);
+      photosFragment.appendChild(dupPhotosCard);
     }
+    photosCard.remove();
+    card.querySelector('.popup__photos').appendChild(photosFragment);
 
     // ----- Возвращаю вывод на страницу
     var closeButton = card.querySelector('.popup__close');

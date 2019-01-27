@@ -27,7 +27,8 @@
   });
   // ----- Добавление картинки объявления
   var adImageChooser = document.querySelector('.ad-form__input');
-  var adImagePreview = document.querySelector('.ad-form__photo').children[0];
+  var adImagePreview = document.querySelector('.ad-form__photo');
+  var imageContainer = document.querySelector('.ad-form__photo-container');
 
   adImageChooser.addEventListener('change', function () {
     var file = adImageChooser.files[0];
@@ -41,11 +42,14 @@
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        adImagePreview.classList.remove('visually-hidden');
-        adImagePreview.src = reader.result;
+        adImagePreview.children[0].classList.remove('visually-hidden');
+        adImagePreview.children[0].src = reader.result;
       });
 
       reader.readAsDataURL(file);
+      var dupImagePreview = adImagePreview.cloneNode(true);
+      imageContainer.insertBefore(dupImagePreview, adImagePreview);
+
     }
   });
 })();

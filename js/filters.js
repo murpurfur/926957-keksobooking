@@ -18,20 +18,20 @@
     features: []
   };
 
-  var invertLow = function (price) {
+  var checkLowPrice = function (price) {
     return price > 10000;
   };
-  var invertMiddle = function (price) {
+  var checkMiddlePrice = function (price) {
     return price < 10000 || price > 50000;
   };
-  var invertHigh = function (price) {
+  var checkHighPrice = function (price) {
     return price < 50000;
   };
 
   var priceFilterMap = {
-    low: invertLow,
-    middle: invertMiddle,
-    high: invertHigh
+    low: checkLowPrice,
+    middle: checkMiddlePrice,
+    high: checkHighPrice
   };
 
   var removePinsCard = function () {
