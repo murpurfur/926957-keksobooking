@@ -33,7 +33,11 @@
   var imageContainer = document.querySelector('.ad-form__photo-container');
   var imageCount = 0;
 
-  adImageChooser.addEventListener('change', function () {
+  var dupImagePreview = adImagePreview.cloneNode(true);
+  var dupImageDiv = adImageDiv.cloneNode(true);
+  dupImageDiv.classList.add('visually-hidden');
+
+  var uploadImage = function () {
     var file = adImageChooser.files[0];
     var fileName = file.name.toLowerCase();
 
@@ -53,18 +57,18 @@
       imageCount = imageCount + 1;
 
       if (imageCount < UPLOADED_IMAGES_LIMIT) {
-        var dupImagePreview = adImagePreview.cloneNode(true);
-        var dupImageDiv = adImageDiv.cloneNode(true);
-        dupImageDiv.classList.add('visually-hidden');
-        imageContainer.insertBefore(dupImagePreview, adImagePreview.nextSibling);
-        imageContainer.insertBefore(dupImageDiv, adImagePreview.nextSibling);
-        adImageChooser.removeEventListener('change');
-
-      } else if (imageCount === UPLOADED_IMAGES_LIMIT) {
-        dupImagePreview = adImagePreview.cloneNode(true);
-        imageContainer.insertBefore(dupImagePreview, adImagePreview.nextSibling);
-        imageContainer.children[UPLOADED_IMAGES_LIMIT + 1].remove();
+        dupImageDiv.addEventListener('change', uploadImage);
+        imageContainer.appendChild(dupImageDiv);
+        imageContainer.appendChild(dupImagePreview);
+        adImageChooser.removeEventListener('change', uploadImage);
       }
+      // else if (imageCount === UPLOADED_IMAGES_LIMIT) {
+      //   imageContainer.insertBefore(dupImagePreview, adImagePreview.nextSibling);
+      //   // imageContainer.children[UPLOADED_IMAGES_LIMIT + 1].remove();
+      // }
     }
-  });
+  };
+
+
+  adImageChooser.addEventListener('change', uploadImage);
 })();
