@@ -6,8 +6,11 @@
     if (addedCard) {
       addedCard.remove();
     }
+
     var templateCard = document.querySelector('#card').content.querySelector('article');
     var card = templateCard.cloneNode(true);
+    // ------ Аватарка
+    card.querySelector('.popup__avatar').src = ad.author.avatar;
     card.querySelector('.popup__title').textContent = ad.offer.title;
     card.querySelector('.popup__text--address').textContent = ad.offer.address;
     card.querySelector('.popup__text--price').textContent = ad.offer.price + '₽/ночь';
