@@ -56,6 +56,7 @@
       if (imageCount < UPLOADED_IMAGES_LIMIT) {
         dupImageDiv.children[0].addEventListener('change', uploadImage);
         imageContainer.insertBefore(dupImageDiv, adImageDiv);
+        adImageDiv.classList.add('visually-hidden');
         imageContainer.insertBefore(dupImagePreview, adImagePreview);
       } else if (imageCount === UPLOADED_IMAGES_LIMIT) {
         document.querySelector('.ad-form__photo').classList.add('visually-hidden');
