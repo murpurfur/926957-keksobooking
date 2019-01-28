@@ -46,7 +46,6 @@
     });
   };
 
-
   window.utils = {
     main: main,
     map: map,
