@@ -31,11 +31,11 @@
     var newUl = document.createElement('ul');
     newUl.classList.add('popup__features');
     var featuresFragment = document.createDocumentFragment();
-    var newBlankLi = document.createElement('li');
+
 
     // ----- Создаю строки в списке на основе массива фичей из первого объекта
     for (var k = 0; k < ad.offer.features.length; k++) {
-      var newLi = newBlankLi.cloneNode(true);
+      var newLi = document.createElement('li');
       newLi.classList.add('popup__feature');
       newLi.classList.add('popup__feature--' + ad.offer.features[k]);
       featuresFragment.appendChild(newLi);

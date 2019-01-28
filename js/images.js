@@ -28,6 +28,7 @@
   });
   // ----- Добавление картинки объявления
   var adImageChooser = document.querySelector('.ad-form__input');
+  var adImageDiv = document.querySelector('.ad-form__upload');
   var adImagePreview = document.querySelector('.ad-form__photo');
   var imageContainer = document.querySelector('.ad-form__photo-container');
   var imageCount = 0;
@@ -53,7 +54,12 @@
 
       if (imageCount < UPLOADED_IMAGES_LIMIT) {
         var dupImagePreview = adImagePreview.cloneNode(true);
+        var dupImageDiv = adImageDiv.cloneNode(true);
+        dupImageDiv.classList.add('visually-hidden');
         imageContainer.insertBefore(dupImagePreview, adImagePreview.nextSibling);
+        imageContainer.insertBefore(dupImageDiv, adImagePreview.nextSibling);
+        adImageChooser.removeEventListener('change');
+
       } else if (imageCount === UPLOADED_IMAGES_LIMIT) {
         dupImagePreview = adImagePreview.cloneNode(true);
         imageContainer.insertBefore(dupImagePreview, adImagePreview.nextSibling);
