@@ -62,7 +62,7 @@
         document.querySelector('.ad-form__photo').classList.add('visually-hidden');
         imageContainer.insertBefore(dupImagePreview, adImagePreview);
       }
-      adImageChooser = document.querySelector('.ad-form__input');
+      adImageChooser = dupImageDiv.children[0];
     }
   };
   adImageChooser.addEventListener('change', uploadImage);
