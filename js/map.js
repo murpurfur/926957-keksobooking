@@ -1,18 +1,18 @@
 'use strict';
 (function () {
-  window.main = document.querySelector('main');
-  var inputFields = window.utils.notice.querySelectorAll('fieldset');
-  var adForm = document.querySelector('.ad-form');
-  var mapFilterFields = document.querySelectorAll('.map__filter');
-  var mapPins = document.querySelector('.map__pins');
-  var mainPin = document.querySelector('.map__pin--main');
-
   var PIN_WIDTH = 65;
   var PIN_HEIGHT = 87;
   var MAP_TOP = 130;
   var MAP_BOTTOM = 630;
   var MAIN_PIN_DEFAULT_X = 570;
   var MAIN_PIN_DEFAULT_Y = 375;
+
+  var inputFields = window.utils.notice.querySelectorAll('fieldset');
+  var adForm = document.querySelector('.ad-form');
+  var mapFilterFields = document.querySelectorAll('.map__filter');
+  var mapPins = document.querySelector('.map__pins');
+  var mainPin = document.querySelector('.map__pin--main');
+  var allAds;
 
   var pinsAreDrawn = false;
 
@@ -23,7 +23,7 @@
 
   // ----- Функция при загрузке данных. Обрезает массив и передает его в функцию отрисовки пинов
   var onSuccess = function (adsArray) {
-    window.allAds = adsArray;
+    window.map.allAds = adsArray;
     window.drawPins(adsArray);
   };
   // ----- Функция вывода ошибки при загрузке данных
@@ -31,7 +31,7 @@
     var errorMessage = document.querySelector('#error').content.querySelector('.error');
     var errorMessageClone = errorMessage.cloneNode(true);
     errorMessage.children[0].textContent = text;
-    window.main.appendChild(errorMessageClone);
+    window.utils.main.appendChild(errorMessageClone);
     var errorButton = document.querySelector('.error__button');
     var errorPopup = document.querySelector('.error');
     window.utils.closeErrorPopup(errorPopup, errorButton, window.load.bind(null, onSuccess, showError));
@@ -64,8 +64,7 @@
       pinsAreDrawn = false;
     }
   };
-  window.disablePageState = disablePageState;
-  window.disablePageState();
+  disablePageState();
 
   // ----- Функция перевода карты в активное состояние
   var enablePageState = function () {
@@ -126,4 +125,9 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
+  window.map = {
+    disablePageState: disablePageState,
+    allAds: allAds
+  };
 })();
