@@ -2,7 +2,7 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-  var UPLOADED_IMAGES_LIMIT = 8;
+  var UPLOADED_IMAGES_LIMIT = 4;
 
   // ----- Добавление аватарки
   var avatarChooser = document.querySelector('.ad-form-header__input');
@@ -33,9 +33,10 @@
   var imageContainer = document.querySelector('.ad-form__photo-container');
   var imageCount = 0;
 
-  var dupImagePreview = adImagePreview.cloneNode(true);
-  var dupImageDiv = adImageDiv.cloneNode(true);
-  dupImageDiv.classList.add('visually-hidden');
+  // var dupImageChooser = adImageChooser.cloneNode(true);
+  // var dupImagePreview = adImagePreview.cloneNode(true);
+  // var dupImageDiv = adImageDiv.cloneNode(true);
+  // dupImageDiv.classList.add('visually-hidden');
 
   var uploadImage = function () {
     var file = adImageChooser.files[0];
@@ -57,15 +58,20 @@
       imageCount = imageCount + 1;
 
       if (imageCount < UPLOADED_IMAGES_LIMIT) {
-        dupImageDiv.addEventListener('change', uploadImage);
-        imageContainer.appendChild(dupImageDiv);
-        imageContainer.appendChild(dupImagePreview);
-        adImageChooser.removeEventListener('change', uploadImage);
+        // dupImageDiv.addEventListener('change', uploadImage);
+        var dupImageDiv = adImageDiv.cloneNode(true);
+        adImageDiv.classList.add('visually-hidden');
+        // var dupImageChooser = adImageChooser.cloneNode(true);
+        var dupImagePreview = adImagePreview.cloneNode(true);
+        dupImageDiv.children[0].addEventListener('change', uploadImage);
+        imageContainer.insertBefore(dupImageDiv, adImageDiv);
+        imageContainer.insertBefore(dupImagePreview, adImagePreview);
+        // imageContainer.appendChild(dupImagePreview);
+        // adImageChooser = dupImageDiv.querySelector('.ad-form__input');
+      } else if (imageCount === UPLOADED_IMAGES_LIMIT) {
+        imageContainer.insertBefore(dupImagePreview, adImagePreview);
       }
-      // else if (imageCount === UPLOADED_IMAGES_LIMIT) {
-      //   imageContainer.insertBefore(dupImagePreview, adImagePreview.nextSibling);
-      //   // imageContainer.children[UPLOADED_IMAGES_LIMIT + 1].remove();
-      // }
+      adImageChooser = document.querySelector('.ad-form__input');
     }
   };
 
