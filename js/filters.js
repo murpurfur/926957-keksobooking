@@ -4,6 +4,8 @@
   var FILTER_PRICE_LOW = 'low';
   var FILTER_PRICE_MIDDLE = 'middle';
   var FILTER_PRICE_HIGH = 'high';
+  var FILTER_PRICE_LOW_VALUE = '10000';
+  var FILTER_PRICE_HIGH_VALUE = '50000';
 
   // ----- Переменные для фильтрации пинов на карте
   var mapFilters = document.querySelector('.map__filters');
@@ -34,16 +36,18 @@
   };
 
   var checkAdPrice = function (selectedPrice, adPrice) {
-    if ((selectedPrice === FILTER_PRICE_LOW) && (adPrice > 10000)) {
-      return true;
-    } else if ((selectedPrice === FILTER_PRICE_MIDDLE) && (adPrice < 10000 || adPrice > 50000)) {
-      return true;
-    } else if ((selectedPrice === FILTER_PRICE_HIGH) && (adPrice < 50000)) {
-      return true;
-    } else {
-      return false;
+    switch (selectedPrice) {
+      case FILTER_PRICE_LOW:
+        return adPrice > FILTER_PRICE_LOW_VALUE;
+      case FILTER_PRICE_MIDDLE:
+        return adPrice < FILTER_PRICE_LOW_VALUE || adPrice > FILTER_PRICE_HIGH_VALUE;
+      case FILTER_PRICE_HIGH:
+        return adPrice < FILTER_PRICE_HIGH_VALUE;
+      default:
+        return false;
     }
   };
+
   var filterPins = function () {
     var filteredAds = window.map.allAds.filter(function (ad) {
       if (filters.type !== FILTER_TYPE_ANY && ad.offer.type !== filters.type) {
