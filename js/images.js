@@ -47,22 +47,29 @@
       reader.addEventListener('load', function () {
         adImagePreview.children[0].classList.remove('visually-hidden');
         adImagePreview.children[0].src = reader.result;
+
       });
 
       reader.readAsDataURL(file);
       imageCount = imageCount + 1;
+
       var dupImageDiv = adImageDiv.cloneNode(true);
       var dupImagePreview = adImagePreview.cloneNode(true);
+
       if (imageCount < UPLOADED_IMAGES_LIMIT) {
         dupImageDiv.children[0].addEventListener('change', uploadImage);
         imageContainer.insertBefore(dupImageDiv, adImageDiv);
         adImageDiv.classList.add('visually-hidden');
         imageContainer.insertBefore(dupImagePreview, adImagePreview);
+        // dupImagePreview.classList.add('visually-hidden');
+
       } else if (imageCount === UPLOADED_IMAGES_LIMIT) {
         document.querySelector('.ad-form__photo').classList.add('visually-hidden');
         imageContainer.insertBefore(dupImagePreview, adImagePreview);
       }
       adImageChooser = dupImageDiv.children[0];
+      // adImagePreview = dupImagePreview;
+
     }
   };
   adImageChooser.addEventListener('change', uploadImage);
