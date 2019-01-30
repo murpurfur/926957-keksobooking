@@ -60,15 +60,14 @@
         dupImageDiv.children[0].addEventListener('change', uploadImage);
         imageContainer.insertBefore(dupImageDiv, adImageDiv);
         adImageDiv.classList.add('visually-hidden');
-        imageContainer.insertBefore(dupImagePreview, adImagePreview);
-        // dupImagePreview.classList.add('visually-hidden');
+        imageContainer.appendChild(dupImagePreview);
+
 
       } else if (imageCount === UPLOADED_IMAGES_LIMIT) {
         document.querySelector('.ad-form__photo').classList.add('visually-hidden');
         imageContainer.insertBefore(dupImagePreview, adImagePreview);
       }
       adImageChooser = dupImageDiv.children[0];
-      // adImagePreview = dupImagePreview;
 
     }
   };
